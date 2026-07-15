@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IBM AWS Training Hub</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --surface: #f7f8fa; --border: #e5e7eb;
+    --text: #1f2328; --muted: #57606a; --accent: #3b82d4; --accent-dark: #2563b0;
+    --success: #16a34a; --warn: #d97706; --radius: 8px; --shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; font-size:14px; line-height:1.6; background:var(--bg); color:var(--text); }
+  .shell { display:flex; min-height:100vh; }
+  nav { width:220px; min-width:220px; background:var(--surface); border-right:1px solid var(--border); padding:20px 0; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto; }
+  nav .logo { padding:0 18px 18px; border-bottom:1px solid var(--border); margin-bottom:6px; }
+  nav .logo h1 { font-size:14px; font-weight:700; line-height:1.3; }
+  nav .logo .logo-sub { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:5px; margin-top:3px; }
+  nav .logo .logo-dot { width:6px; height:6px; border-radius:50%; background:var(--success); display:inline-block; }
+  nav a { display:flex; align-items:center; gap:9px; padding:8px 18px; font-size:13px; color:var(--muted); text-decoration:none; border-left:3px solid transparent; cursor:pointer; transition:background .15s,color .15s; }
+  nav a:hover, nav a.active { color:var(--accent); background:rgba(59,130,212,.07); border-left-color:var(--accent); }
+  nav a .nav-icon { font-size:15px; width:20px; text-align:center; flex-shrink:0; }
+  nav a .nav-badge { margin-left:auto; background:var(--accent); color:#fff; font-size:10px; font-weight:700; padding:1px 6px; border-radius:10px; }
+  nav a .nav-badge.warn { background:var(--warn); }
+  nav a .nav-badge.green { background:var(--success); }
+  .ns { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding:16px 18px 4px; }
+  .nav-divider { border:none; border-top:1px solid var(--border); margin:8px 14px; }
+  main { flex:1; padding:28px 32px; overflow-x:hidden; }
+  .page { display:none; } .page.active { display:block; }
+  .page-title { font-size:19px; font-weight:700; margin-bottom:3px; }
+  .page-sub { color:var(--muted); font-size:13px; margin-bottom:20px; }
+  .srow { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+  .srow input, .srow select { padding:7px 11px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; color:var(--text); background:var(--bg); outline:none; }
+  .srow input:focus, .srow select:focus { border-color:var(--accent); }
+  .srow input { flex:1; min-width:160px; }
+  .btn { padding:7px 16px; border-radius:var(--radius); font-size:13px; font-weight:500; border:none; cursor:pointer; }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { background:var(--accent-dark); }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; margin-bottom:8px; }
+  .card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); }
+  .card h3 { font-size:13px; font-weight:600; margin-bottom:5px; line-height:1.4; }
+  .card .cmeta { font-size:12px; color:var(--muted); margin-bottom:8px; }
+  .card a { color:var(--accent); font-size:12px; text-decoration:none; margin-right:10px; }
+  .tw { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead { background:var(--surface); border-top:2px solid var(--accent); }
+  th { padding:9px 11px; text-align:left; font-weight:600; border-bottom:1px solid var(--border); white-space:nowrap; }
+  td { padding:9px 11px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:hover td { background:var(--surface); }
+  tr:last-child td { border-bottom:none; }
+  .badge { display:inline-block; padding:2px 7px; border-radius:10px; font-size:11px; font-weight:500; white-space:nowrap; }
+  .b-blue   { background:#dbeafe; color:#1d4ed8; }
+  .b-yellow { background:#fef9c3; color:#854d0e; }
+  .b-green  { background:#dcfce7; color:#166534; }
+  .b-purple { background:#ede9fe; color:#5b21b6; }
+  .b-red    { background:#fee2e2; color:#991b1b; }
+  .b-gray   { background:#f3f4f6; color:#374151; }
+  .faq-item { border:1px solid var(--border); border-radius:var(--radius); margin-bottom:7px; overflow:hidden; }
+  .faq-q { padding:11px 14px; font-weight:500; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+  .faq-q:hover { background:var(--surface); }
+  .faq-a { padding:0 14px; max-height:0; overflow:hidden; transition:max-height .3s ease,padding .2s; font-size:13px; color:var(--muted); background:var(--surface); }
+  .faq-a.open { max-height:300px; padding:11px 14px; }
+  .faq-tags { display:none; flex-wrap:wrap; gap:4px; padding:0 14px 10px; background:var(--surface); }
+  .faq-tags.open { display:flex; }
+  .tabs { display:flex; gap:3px; border-bottom:2px solid var(--border); margin-bottom:18px; flex-wrap:wrap; }
+  .tab { padding:7px 14px; font-size:13px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; color:var(--muted); }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+  .sttl { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:22px 0 10px; }
+  .ll { list-style:none; }
+  .ll li { padding:8px 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; gap:10px; font-size:13px; }
+  .ll li:last-child { border-bottom:none; }
+  .ll .t { flex:1; }
+  .ll a { color:var(--accent); text-decoration:none; font-size:12px; white-space:nowrap; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block; font-weight:500; font-size:13px; margin-bottom:5px; }
+  .form-group select { width:100%; padding:7px 11px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; color:var(--text); }
+  .rbox { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; font-size:13px; line-height:1.9; white-space:pre-wrap; margin-top:18px; display:none; }
+  .rbox.v { display:block; }
+  .empty { color:var(--muted); font-size:13px; padding:20px 0; text-align:center; }
+  footer { margin-top:40px; padding-top:10px; border-top:1px solid var(--border); text-align:center; font-size:11px; color:var(--muted); }
+  /* ── Dashboard ── */
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:24px; }
+  .stat-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); }
+  .stat-card .stat-val { font-size:28px; font-weight:700; color:var(--accent); line-height:1; }
+  .stat-card .stat-lbl { font-size:12px; color:var(--muted); margin-top:4px; }
+  .stat-card .stat-icon { font-size:22px; margin-bottom:6px; }
+  .dash-section { margin-bottom:24px; }
+  .dash-section h3 { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  /* ── Quick Links ── */
+  .ql-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; }
+  .ql-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; display:flex; align-items:center; gap:12px; box-shadow:var(--shadow); }
+  .ql-card .ql-icon { font-size:22px; flex-shrink:0; }
+  .ql-card .ql-text { flex:1; }
+  .ql-card .ql-text strong { display:block; font-size:13px; font-weight:600; }
+  .ql-card .ql-text span { font-size:11px; color:var(--muted); }
+  .ql-card a.ql-go { color:var(--accent); font-size:12px; font-weight:600; text-decoration:none; white-space:nowrap; }
+  /* ── My Enrolments ── */
+  .enrol-empty { text-align:center; padding:40px 0; color:var(--muted); font-size:13px; }
+  .enrol-empty .enrol-icon { font-size:40px; margin-bottom:10px; }
+  .status-pill { display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:12px; font-size:11px; font-weight:600; }
+  .sp-enrolled  { background:#dbeafe; color:#1d4ed8; }
+  .sp-completed { background:#dcfce7; color:#166534; }
+  .sp-cancelled { background:#fee2e2; color:#991b1b; }
+  .sp-waitlisted{ background:#fef9c3; color:#854d0e; }
+  /* ── Workshops ── */
+  .ws-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:12px; }
+  .ws-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
+  .ws-card .ws-cat { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:6px; }
+  .ws-card h3 { font-size:13px; font-weight:600; margin-bottom:5px; line-height:1.4; }
+  .ws-card p { font-size:12px; color:var(--muted); margin-bottom:10px; line-height:1.5; }
+  .ws-card a { color:var(--accent); font-size:12px; font-weight:600; text-decoration:none; }
+  /* ── Chat (page) ── */
+  #page-chat { display:none; flex-direction:column; height:calc(100vh - 60px); }
+  #page-chat.active { display:flex; }
+  .chat-msgs { flex:1; overflow-y:auto; padding:8px 0 16px; display:flex; flex-direction:column; gap:12px; }
+  .msg { max-width:78%; display:flex; flex-direction:column; gap:3px; }
+  .msg.user { align-self:flex-end; align-items:flex-end; }
+  .msg.bot  { align-self:flex-start; align-items:flex-start; }
+  .bubble { padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.6; }
+  .msg.user .bubble { background:var(--accent); color:#fff; border-bottom-right-radius:4px; }
+  .msg.bot  .bubble { background:var(--surface); border:1px solid var(--border); color:var(--text); border-bottom-left-radius:4px; }
+  .msg.bot  .bubble a { color:var(--accent); }
+  .msg-time { font-size:10px; color:var(--muted); }
+  .chat-chips { display:flex; flex-wrap:wrap; gap:6px; padding:8px 0 12px; }
+  .chip { padding:5px 12px; border-radius:20px; border:1px solid var(--border); font-size:12px; cursor:pointer; background:var(--bg); color:var(--accent); white-space:nowrap; }
+  .chip:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .chat-input-row { display:flex; gap:8px; padding-top:10px; border-top:1px solid var(--border); }
+  .chat-input-row input { flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:22px; font-size:13px; outline:none; }
+  .chat-input-row input:focus { border-color:var(--accent); }
+  /* ── Floating chatbot widget ── */
+  #fw-fab { position:fixed; bottom:24px; right:24px; width:54px; height:54px; border-radius:50%; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:24px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(59,130,212,.45); z-index:9999; transition:background .15s,transform .15s; }
+  #fw-fab:hover { background:var(--accent-dark); transform:scale(1.08); }
+  #fw-fab .fw-badge { position:absolute; top:-3px; right:-3px; background:#ef4444; color:#fff; font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; }
+  #fw-panel { position:fixed; bottom:88px; right:24px; width:360px; max-height:540px; background:var(--bg); border:1px solid var(--border); border-radius:16px; box-shadow:0 8px 30px rgba(0,0,0,.14); display:flex; flex-direction:column; z-index:9998; overflow:hidden; transform:scale(.94) translateY(12px); opacity:0; pointer-events:none; transition:transform .2s ease,opacity .2s ease; }
+  #fw-panel.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+  #fw-header { background:var(--accent); color:#fff; padding:13px 16px; display:flex; align-items:center; gap:10px; }
+  #fw-header .fw-avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  #fw-header .fw-title { flex:1; }
+  #fw-header .fw-title strong { display:block; font-size:13px; font-weight:700; }
+  #fw-header .fw-title span { font-size:11px; opacity:.85; }
+  #fw-header .fw-close { background:none; border:none; color:#fff; font-size:18px; cursor:pointer; opacity:.8; padding:2px 4px; line-height:1; }
+  #fw-header .fw-close:hover { opacity:1; }
+  #fw-chips { display:flex; flex-wrap:wrap; gap:5px; padding:10px 12px 0; }
+  #fw-chips .chip { font-size:11px; padding:4px 10px; }
+  #fw-msgs { flex:1; overflow-y:auto; padding:10px 12px 4px; display:flex; flex-direction:column; gap:10px; min-height:180px; }
+  #fw-msgs .msg { max-width:86%; }
+  #fw-msgs .bubble { font-size:12.5px; padding:9px 12px; }
+  #fw-msgs .msg-time { font-size:10px; }
+  #fw-input-row { display:flex; gap:6px; padding:10px 12px; border-top:1px solid var(--border); }
+  #fw-input-row input { flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:20px; font-size:12.5px; outline:none; background:var(--bg); color:var(--text); }
+  #fw-input-row input:focus { border-color:var(--accent); }
+  #fw-input-row button { padding:8px 14px; background:var(--accent); color:#fff; border:none; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; }
+  #fw-input-row button:hover { background:var(--accent-dark); }
+  .chat-input-row button { padding:10px 20px; background:var(--accent); color:#fff; border:none; border-radius:22px; font-size:13px; font-weight:600; cursor:pointer; }
+  .chat-input-row button:hover { background:var(--accent-dark); }
+  .typing { display:flex; gap:4px; align-items:center; padding:12px 14px; }
+  .typing span { width:7px; height:7px; background:var(--muted); border-radius:50%; animation:blink 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay:.2s; }
+  .typing span:nth-child(3) { animation-delay:.4s; }
+  @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <h1>IBM AWS<br>Training Hub</h1>
+    <div class="logo-sub"><span class="logo-dot"></span>L&amp;K India</div>
+  </div>
+
+  <div class="ns">Overview</div>
+  <a id="nav-dashboard"  onclick="show('dashboard')" class="active"><span class="nav-icon">&#127968;</span>Dashboard</a>
+  <a id="nav-calendar"   onclick="show('calendar')"><span class="nav-icon">&#128197;</span>Training Calendar<span class="nav-badge warn">9</span></a>
+  <a id="nav-enrolments" onclick="show('enrolments')"><span class="nav-icon">&#128203;</span>My Enrolments</a>
+
+  <div class="ns">Learn</div>
+  <a id="nav-certs"      onclick="show('certs')"><span class="nav-icon">&#127885;</span>Certifications<span class="nav-badge">13</span></a>
+  <a id="nav-genai"      onclick="show('genai')"><span class="nav-icon">&#129504;</span>Gen AI Paths<span class="nav-badge green">13</span></a>
+  <a id="nav-reskilling" onclick="show('reskilling')"><span class="nav-icon">&#128260;</span>Reskilling Tracks</a>
+  <a id="nav-workshops"  onclick="show('workshops')"><span class="nav-icon">&#128187;</span>Workshops &amp; Labs</a>
+
+  <div class="ns">Resources</div>
+  <a id="nav-resources"  onclick="show('resources')"><span class="nav-icon">&#128218;</span>All Resources</a>
+  <a id="nav-quicklinks" onclick="show('quicklinks')"><span class="nav-icon">&#128279;</span>Quick Links</a>
+
+  <hr class="nav-divider">
+  <div class="ns">Help</div>
+  <a id="nav-faq"       onclick="show('faq')"><span class="nav-icon">&#10067;</span>FAQ<span class="nav-badge">27</span></a>
+  <a id="nav-recommend" onclick="show('recommend')"><span class="nav-icon">&#129517;</span>Path Recommender</a>
+  <a id="nav-chat"      onclick="show('chat')" style="background:rgba(59,130,212,.08);border-left:3px solid var(--accent);color:var(--accent);font-weight:600;"><span class="nav-icon">&#129302;</span>Ask the Bot</a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+<!-- DASHBOARD -->
+<section class="page active" id="page-dashboard">
+  <div class="page-title">Dashboard</div>
+  <div class="page-sub">Your AWS training snapshot at a glance</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-icon">&#128197;</div><div class="stat-val">9</div><div class="stat-lbl">Upcoming Events</div></div>
+    <div class="stat-card"><div class="stat-icon">&#127885;</div><div class="stat-val">13</div><div class="stat-lbl">Certifications</div></div>
+    <div class="stat-card"><div class="stat-icon">&#129504;</div><div class="stat-val">13</div><div class="stat-lbl">Gen AI Paths</div></div>
+    <div class="stat-card"><div class="stat-icon">&#10067;</div><div class="stat-val">27</div><div class="stat-lbl">FAQ Answers</div></div>
+    <div class="stat-card"><div class="stat-icon">&#128218;</div><div class="stat-val">40+</div><div class="stat-lbl">Resources</div></div>
+    <div class="stat-card"><div class="stat-icon">&#128260;</div><div class="stat-val">6</div><div class="stat-lbl">Reskilling Tracks</div></div>
+  </div>
+
+  <div class="dash-section">
+    <h3>&#128293; Next Up — Upcoming Events</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Event</th><th>Type</th><th>Start</th><th>Days Away</th><th>Enrol</th></tr></thead>
+      <tbody id="dash-events"></tbody>
+    </table></div>
+  </div>
+
+  <div class="dash-section">
+    <h3>&#127775; Featured Certifications</h3>
+    <div class="card-grid" id="dash-certs"></div>
+  </div>
+
+  <div class="dash-section">
+    <h3>&#128640; Quick Actions</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <button class="btn btn-primary" onclick="show('calendar')">&#128197; View Full Calendar</button>
+      <button class="btn" style="border:1px solid var(--border);" onclick="show('certs')">&#127885; Browse Certifications</button>
+      <button class="btn" style="border:1px solid var(--border);" onclick="show('recommend')">&#129517; Get My Learning Path</button>
+      <button class="btn" style="border:1px solid var(--border);" onclick="show('chat')">&#129302; Ask the Bot</button>
+      <button class="btn" style="border:1px solid var(--border);" onclick="show('faq')">&#10067; Read FAQ</button>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section class="page" id="page-calendar">
+  <div class="page-title">Training Calendar</div>
+  <div class="page-sub">Upcoming AWS training events &amp; sessions</div>
+  <div class="srow">
+    <input id="cal-kw" placeholder="Search events..." oninput="renderCalendar()" />
+    <select id="cal-cat" onchange="renderCalendar()">
+      <option value="">All Categories</option>
+      <option>Certification</option><option>Course</option><option>PartnerCast</option><option>Series</option>
+    </select>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>Event</th><th>Type</th><th>Time</th><th>Start</th><th>End</th><th>Days Away</th><th>Enrol</th></tr></thead>
+    <tbody id="cal-tbody"></tbody>
+  </table></div>
+</section>
+
+<!-- CERTS -->
+<section class="page" id="page-certs">
+  <div class="page-title">AWS Certifications</div>
+  <div class="page-sub">Learning paths for every level</div>
+  <div class="srow">
+    <input id="cert-kw" placeholder="Search certifications..." oninput="renderCerts()" />
+    <select id="cert-lv" onchange="renderCerts()">
+      <option value="">All Levels</option>
+      <option>Foundation</option><option>Associate</option><option>Professional</option><option>Specialty</option>
+    </select>
+  </div>
+  <div id="cert-cards"></div>
+  <div class="sttl">CPE Bootcamp Modules (Recorded)</div>
+  <ul class="ll" id="cpe-ul"></ul>
+  <div class="sttl">External Learning Paths (AWS Skill Builder)</div>
+  <ul class="ll" id="ext-ul"></ul>
+</section>
+
+<!-- MY ENROLMENTS -->
+<section class="page" id="page-enrolments">
+  <div class="page-title">My Enrolments</div>
+  <div class="page-sub">Track the events you have enrolled in</div>
+  <div class="srow">
+    <select id="enrol-filter" onchange="renderEnrolments()">
+      <option value="">All Statuses</option>
+      <option value="enrolled">Enrolled</option>
+      <option value="completed">Completed</option>
+      <option value="waitlisted">Waitlisted</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+  </div>
+  <div id="enrol-body"></div>
+</section>
+
+<!-- GEN AI -->
+<section class="page" id="page-genai">
+  <div class="page-title">Gen AI Learning Paths</div>
+  <div class="page-sub">IBM &amp; AWS Gen AI badges and certifications by role</div>
+  <div class="srow">
+    <input id="genai-kw" placeholder="Search by role or title..." oninput="renderGenAI()" />
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>Title</th><th>Badge</th><th>Duration</th><th>Audience</th><th>Link</th></tr></thead>
+    <tbody id="genai-tbody"></tbody>
+  </table></div>
+</section>
+
+<!-- RESOURCES -->
+<section class="page" id="page-resources">
+  <div class="page-title">All Resources</div>
+  <div class="page-sub">Tech Talks &middot; Immersion Days &middot; Discovery Series &middot; Hackathon Recordings &middot; IBM Blogs</div>
+  <div class="srow">
+    <input id="res-kw" placeholder="Search resources..." oninput="renderResources()" />
+  </div>
+  <div class="tabs" id="res-tabs"></div>
+  <div id="res-body"></div>
+</section>
+
+<!-- WORKSHOPS -->
+<section class="page" id="page-workshops">
+  <div class="page-title">Workshops &amp; Labs</div>
+  <div class="page-sub">Hands-on AWS labs, immersion days, and self-paced workshops</div>
+  <div class="srow">
+    <input id="ws-kw" placeholder="Search workshops..." oninput="renderWorkshops()" />
+    <select id="ws-cat" onchange="renderWorkshops()">
+      <option value="">All Categories</option>
+      <option>Immersion Day</option>
+      <option>Hackathon</option>
+      <option>Discovery Series</option>
+      <option>External</option>
+    </select>
+  </div>
+  <div class="ws-grid" id="ws-grid"></div>
+</section>
+
+<!-- QUICK LINKS -->
+<section class="page" id="page-quicklinks">
+  <div class="page-title">Quick Links</div>
+  <div class="page-sub">Jump to frequently needed IBM &amp; AWS pages</div>
+  <div class="sttl">Certification &amp; Exam</div>
+  <div class="ql-grid">
+    <div class="ql-card"><div class="ql-icon">&#128196;</div><div class="ql-text"><strong>LRT Portal</strong><span>Raise certification requests</span></div><a class="ql-go" href="https://lrt.ibm.com" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#127882;</div><div class="ql-text"><strong>AWS Cert Guide</strong><span>ibm.biz/AWSCertGuide</span></div><a class="ql-go" href="https://ibm.biz/AWSCertGuide" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128203;</div><div class="ql-text"><strong>Exam Scheduling Guide</strong><span>AWS cert scheduling steps</span></div><a class="ql-go" href="https://w3.ibm.com/w3publisher/certification-exam-scheduling-guides/aws-cert-scheduling-guide" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#127891;</div><div class="ql-text"><strong>Skill Builder Form</strong><span>Request AWS Skill Builder license</span></div><a class="ql-go" href="https://w3.ibm.com/w3publisher/lkindia-aws-information/aws-skill-builder-collation-form" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128142;</div><div class="ql-text"><strong>Credly Settings</strong><span>Enable Credly Connect on W3</span></div><a class="ql-go" href="https://w3.ibm.com/w3publisher/credly-and-credential-vendor-settings" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128683;</div><div class="ql-text"><strong>Credly Support</strong><span>Fix missing certification badge</span></div><a class="ql-go" href="https://www.aws.training/certification" target="_blank" rel="noopener">Open &rarr;</a></div>
+  </div>
+  <div class="sttl" style="margin-top:20px">Learning Platforms</div>
+  <div class="ql-grid">
+    <div class="ql-card"><div class="ql-icon">&#127979;</div><div class="ql-text"><strong>IBM YourLearning</strong><span>All IBM learning plans</span></div><a class="ql-go" href="https://yourlearning.ibm.com" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128640;</div><div class="ql-text"><strong>AWS Skill Builder</strong><span>Official AWS learning platform</span></div><a class="ql-go" href="https://explore.skillbuilder.aws" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128296;</div><div class="ql-text"><strong>AWS Workshops</strong><span>Hands-on labs at workshops.aws</span></div><a class="ql-go" href="https://workshops.aws/" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#129302;</div><div class="ql-text"><strong>AWS AI Explorer</strong><span>Explore Gen AI on AWS</span></div><a class="ql-go" href="https://aiexplorer.aws.amazon.com/" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128240;</div><div class="ql-text"><strong>AWS What's New</strong><span>Latest AWS announcements</span></div><a class="ql-go" href="https://aws.amazon.com/new/" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128200;</div><div class="ql-text"><strong>AWS Training Calendar</strong><span>L&amp;K India W3 page</span></div><a class="ql-go" href="https://w3.ibm.com/w3publisher/aws-training-calendar-resources" target="_blank" rel="noopener">Open &rarr;</a></div>
+  </div>
+  <div class="sttl" style="margin-top:20px">IBM Internal</div>
+  <div class="ql-grid">
+    <div class="ql-card"><div class="ql-icon">&#128101;</div><div class="ql-text"><strong>Sector Primus List</strong><span>Nominate for enablement sessions</span></div><a class="ql-go" href="https://w3.ibm.com/w3publisher/aws-training-calendar-resources" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128269;</div><div class="ql-text"><strong>LRT Escalation Matrix</strong><span>Approval escalation contacts</span></div><a class="ql-go" href="https://w3.ibm.com/w3publisher/aws-training-calendar-resources" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128736;</div><div class="ql-text"><strong>AALEARN2 (ILC)</strong><span>Claim learning credits</span></div><a class="ql-go" href="https://aalearn2.ibm.com" target="_blank" rel="noopener">Open &rarr;</a></div>
+    <div class="ql-card"><div class="ql-icon">&#128205;</div><div class="ql-text"><strong>Well-Architected PartnerCast</strong><span>Password: AWSTraining2023</span></div><a class="ql-go" href="https://ibm.biz/wellarchitectedpractice" target="_blank" rel="noopener">Open &rarr;</a></div>
+  </div>
+</section>
+
+<!-- RESKILLING -->
+<section class="page" id="page-reskilling">
+  <div class="page-title">Reskilling Tracks</div>
+  <div class="page-sub">AWS learning paths for role transitions, accounts &amp; tournaments</div>
+  <ul class="ll" id="reskill-ul"></ul>
+  <div class="sttl">Account-Specific Learning Paths</div>
+  <ul class="ll" id="account-ul"></ul>
+  <div class="sttl">Well Architected Framework</div>
+  <ul class="ll" id="waf-ul"></ul>
+  <div class="sttl">Tournaments &amp; Play and Learn</div>
+  <ul class="ll" id="tournament-ul"></ul>
+</section>
+
+<!-- FAQ -->
+<section class="page" id="page-faq">
+  <div class="page-title">FAQ</div>
+  <div class="page-sub">27 answered questions about LRT, vouchers, Credly, CAP &amp; more</div>
+  <div class="srow">
+    <input id="faq-kw" placeholder="Search e.g. voucher, LRT, Credly..." oninput="renderFAQ()" />
+    <select id="faq-tag" onchange="renderFAQ()">
+      <option value="">All Topics</option>
+      <option value="lrt">LRT</option>
+      <option value="voucher">Voucher</option>
+      <option value="credly">Credly</option>
+      <option value="scheduling">Scheduling</option>
+      <option value="cap">CAP</option>
+      <option value="skill builder">Skill Builder</option>
+      <option value="hcam">HCAM</option>
+      <option value="certification">Certification</option>
+    </select>
+  </div>
+  <div id="faq-count" style="font-size:12px;color:var(--muted);margin-bottom:12px;"></div>
+  <div id="faq-body"></div>
+</section>
+
+<!-- RECOMMENDER -->
+<section class="page" id="page-recommend">
+  <div class="page-title">Learning Path Recommender</div>
+  <div class="page-sub">Get a personalised AWS learning path based on your role and goals</div>
+  <div style="max-width:460px;">
+    <div class="form-group"><label>Your Role</label>
+      <select id="rec-role">
+        <option value="">Select a role...</option>
+        <option>Developer</option><option>Architect</option><option>Data Scientist</option>
+        <option>DevOps Engineer</option><option>SysOps Administrator</option>
+        <option>Consultant / PM</option><option>Sales</option><option>Designer</option>
+        <option>Network Engineer</option><option>Security Engineer</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Experience Level</label>
+      <select id="rec-level">
+        <option value="beginner">Beginner - new to AWS</option>
+        <option value="intermediate">Intermediate - some AWS experience</option>
+        <option value="expert">Expert - seasoned practitioner</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Area of Focus <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <select id="rec-goal">
+        <option value="">No specific focus</option>
+        <option value="gen ai">Gen AI / Generative AI</option>
+        <option value="migration">Migration</option>
+        <option value="security">Security</option>
+        <option value="machine learning">Machine Learning</option>
+        <option value="serverless">Serverless</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="recommend()">Get My Learning Path</button>
+  </div>
+  <div class="rbox" id="rec-result"></div>
+</section>
+
+<!-- CHAT -->
+<section class="page" id="page-chat">
+  <div class="page-title">Ask the Bot</div>
+  <div class="page-sub">Ask anything about AWS training, certifications, vouchers, LRT, Gen AI paths and more.</div>
+  <div class="chat-chips" id="chat-chips">
+    <span class="chip" onclick="chipAsk('What events are coming up?')">What events are coming up?</span>
+    <span class="chip" onclick="chipAsk('How do I get a voucher?')">How do I get a voucher?</span>
+    <span class="chip" onclick="chipAsk('What is CAP?')">What is CAP?</span>
+    <span class="chip" onclick="chipAsk('Show me Associate certifications')">Associate certifications</span>
+    <span class="chip" onclick="chipAsk('I am a developer, what should I study?')">I am a developer</span>
+    <span class="chip" onclick="chipAsk('What Gen AI courses are available?')">Gen AI courses</span>
+    <span class="chip" onclick="chipAsk('What do I do after clearing my exam?')">After clearing exam</span>
+    <span class="chip" onclick="chipAsk('How do I get AWS Skill Builder?')">AWS Skill Builder</span>
+  </div>
+  <div class="chat-msgs" id="chat-msgs"></div>
+  <div class="chat-input-row">
+    <input id="chat-in" placeholder="Ask a question..." onkeydown="if(event.key==='Enter')sendChat()" />
+    <button onclick="sendChat()">Send</button>
+  </div>
+</section>
+
+<footer>Made with IBM Bob</footer>
+</main>
+</div>
+
+<!-- ── FLOATING CHATBOT WIDGET ────────────────────────────────────────────── -->
+<button id="fw-fab" onclick="fwToggle()" title="Ask the Bot">
+  <span id="fw-fab-icon">&#129302;</span>
+  <span class="fw-badge" id="fw-badge" style="display:none">1</span>
+</button>
+
+<div id="fw-panel">
+  <div id="fw-header">
+    <div class="fw-avatar">&#129302;</div>
+    <div class="fw-title">
+      <strong>AWS Training Assistant</strong>
+      <span>&#128994; Online &mdash; ask me anything</span>
+    </div>
+    <button class="fw-close" onclick="fwToggle()" title="Close">&#10005;</button>
+  </div>
+
+  <div id="fw-chips">
+    <span class="chip" onclick="fwChip('What events are coming up?')">&#128197; Events</span>
+    <span class="chip" onclick="fwChip('How do I get a voucher?')">&#127881; Voucher</span>
+    <span class="chip" onclick="fwChip('What is CAP?')">&#128218; CAP</span>
+    <span class="chip" onclick="fwChip('Associate certifications')">&#127885; Certs</span>
+    <span class="chip" onclick="fwChip('What Gen AI courses are available?')">&#129504; Gen AI</span>
+    <span class="chip" onclick="fwChip('How do I get AWS Skill Builder?')">&#128640; Skill Builder</span>
+    <span class="chip" onclick="fwChip('What do I do after clearing my exam?')">&#10003; After exam</span>
+  </div>
+
+  <div id="fw-msgs"></div>
+
+  <div id="fw-input-row">
+    <input id="fw-in" placeholder="Type a question..." onkeydown="if(event.key==='Enter')fwSend()" />
+    <button onclick="fwSend()">Send</button>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+
+var EVENTS = [
+  {id:1,title:"AWS PartnerCast: Claude Code on Amazon Bedrock - Best Practices for Production-Ready AI Development",category:"PartnerCast",ts:"10:00",te:"11:00",sd:"2026-07-03",ed:"2026-07-03",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:2,title:"AWS Certified Solutions Architect - Professional",category:"Certification",ts:"12:30",te:"14:30",sd:"2026-07-06",ed:"2026-08-18",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:3,title:"Python 3 Programming",category:"Course",ts:"09:30",te:"17:30",sd:"2026-07-20",ed:"2026-07-24",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:4,title:"AWS Certified Generative AI Developer - Professional",category:"Certification",ts:"18:00",te:"20:00",sd:"2026-07-08",ed:"2026-08-20",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:5,title:"Part 1: Introduction to the AI-Driven Development Lifecycle (AI-DLC)",category:"Series",ts:"10:00",te:"10:45",sd:"2026-07-21",ed:"2026-07-21",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:6,title:"Part 2: AI-DLC in Depth: From Principles to Practice",category:"Series",ts:"10:00",te:"11:00",sd:"2026-07-23",ed:"2026-07-23",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:7,title:"AWS Certified Solutions Architect - Associate",category:"Certification",ts:"13:30",te:"15:30",sd:"2026-08-10",ed:"2026-09-08",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:8,title:"Architecting on AWS with Certification Prep",category:"Course",ts:"09:30",te:"13:30",sd:"2026-09-08",ed:"2026-09-08",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  {id:9,title:"Advanced Architecting on AWS",category:"Course",ts:"09:30",te:"13:30",sd:"2026-09-21",ed:"2026-09-28",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"}
+];
+
+var CERTS = [
+  {name:"AWS Certified Cloud Practitioner",level:"Foundation",ibm:"https://yourlearning.ibm.com/activity/PLAN-0149BED84CC5",aws:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},
+  {name:"AWS Certified AI Practitioner",level:"Foundation",ibm:"https://yourlearning.ibm.com/activity/PLAN-0F304CDFFCF5",aws:"https://aws.amazon.com/certification/certified-ai-practitioner/"},
+  {name:"AWS Certified Machine Learning Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-C5498711CF81",aws:"https://aws.amazon.com/certification/certified-machine-learning-engineer-associate/",notes:"Hands-on + Practice Exam also available"},
+  {name:"AWS Certified Solution Architect - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-9CA8E9AAA409",aws:"https://aws.amazon.com/certification/certified-solutions-architect-associate/"},
+  {name:"AWS Certified Developer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-D7A55914AB99",aws:"https://aws.amazon.com/certification/certified-developer-associate/",notes:"Mock Exam available"},
+  {name:"AWS Certified SysOps Administrator - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-D3830A921C06/track-progress",aws:"https://aws.amazon.com/certification/certified-sysops-admin-associate/"},
+  {name:"AWS Certified Data Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/UDEMY-5591620"},
+  {name:"AWS Certified Solutions Architect - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/PLAN-14CA33A3EC94",aws:"https://aws.amazon.com/certification/certified-solutions-architect-professional/"},
+  {name:"AWS Certified DevOps Engineer - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/PLAN-09619BF9E491",aws:"https://aws.amazon.com/certification/certified-devops-engineer-professional/"},
+  {name:"AWS Certified Generative AI Developer - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/UDEMY-6928347",aws:"https://aws.amazon.com/certification/certified-generative-ai-developer-professional/"},
+  {name:"AWS Certified Advanced Networking - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-A9447D0DD1A3",aws:"https://aws.amazon.com/certification/certified-advanced-networking-specialty/"},
+  {name:"AWS Certified Machine Learning - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-42E4D536A9E1",aws:"https://aws.amazon.com/certification/certified-machine-learning-specialty/"},
+  {name:"AWS Certified Security - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-2D05C80F7472",aws:"https://aws.amazon.com/certification/certified-security-specialty/"}
+];
+
+var CPE = [
+  {m:"Intro",t:"Accessing AWS CPE through Skill Builder",link:"https://w3.ibm.com/services/lighthouse/videos/109763"},
+  {m:"Module 1",t:"Introduction to Amazon Web Services",link:"https://w3.ibm.com/services/lighthouse/videos/109670"},
+  {m:"Module 2",t:"Compute in the Cloud",link:"https://w3.ibm.com/services/lighthouse/videos/109723"},
+  {m:"Module 3",t:"Global Infrastructure and Reliability",link:"https://w3.ibm.com/services/lighthouse/videos/109728"},
+  {m:"Module 4",t:"Networking",link:"https://w3.ibm.com/services/lighthouse/videos/109756"},
+  {m:"Module 5",t:"Storage and Databases",link:"https://w3.ibm.com/services/lighthouse/videos/109789"},
+  {m:"Module 6",t:"Security",link:"https://w3.ibm.com/services/lighthouse/videos/109895"},
+  {m:"Module 7A",t:"Monitoring and Analytics",link:"https://w3.ibm.com/services/lighthouse/videos/109897"},
+  {m:"Module 7B",t:"Monitoring and Analytics - Part 2",link:"https://w3.ibm.com/services/lighthouse/videos/109898"},
+  {m:"Module 8",t:"Pricing and Support",link:"https://w3.ibm.com/services/lighthouse/videos/109970"},
+  {m:"Module 9",t:"Migration and Innovation",link:"https://w3.ibm.com/services/lighthouse/videos/110042"},
+  {m:"Module 10",t:"AWS Certified Cloud Practitioner Basics",link:"https://w3.ibm.com/services/lighthouse/videos/110107"},
+  {m:"Module 11",t:"Practice Test",link:"https://w3.ibm.com/services/lighthouse/videos/110108"}
+];
+
+var EXT = [
+  {name:"AWS Solutions Architect Associate Partner Learning Plan",level:"Associate",link:"https://explore.skillbuilder.aws/learn/learning_plan/view/880/AWS-Solutions-Architect-Associate-Certification-Partner-Learning-Plan"},
+  {name:"AWS Developer Associate Partner Learning Plan",level:"Associate",link:"https://explore.skillbuilder.aws/learn/learning_plan/view/920/AWS-Developer-Associate-Certification-Partner-Learning-Plan"},
+  {name:"AWS SysOps Administrator Associate Partner Learning Plan",level:"Associate",link:"https://explore.skillbuilder.aws/learn/lp/1662/aws-certified-sysops-administrator-associate-partner-learning-plan"},
+  {name:"AWS Data Engineering Associate Practice Exam",level:"Associate",link:"https://explore.skillbuilder.aws/course/edit/19881"},
+  {name:"Solution Architect Partner Learning Plan",level:"Professional",link:"https://explore.skillbuilder.aws/learn/learning_plan/view/104/solution-architect-partner-learning-plan"},
+  {name:"DevOps Engineer Partner Learning Plan",level:"Professional",link:"https://explore.skillbuilder.aws/learn/learning_plan/view/105/devops-engineer-partner-learning-plan"},
+  {name:"Machine Learning Engineer Partner Learning Plan",level:"Specialty",link:"https://explore.skillbuilder.aws/learn/learning_plan/view/107/machine-learning-engineer-partner-learning-plan"},
+  {name:"Network Engineer Partner Learning Plan",level:"Specialty",link:"https://explore.skillbuilder.aws/learn/lp/106/NetworkEngineerPartnerLearningPlan"},
+  {name:"Security Engineer Partner Learning Plan",level:"Specialty",link:"https://explore.skillbuilder.aws/learn/learning_plan/view/112/security-engineer-partner-learning-plan"},
+  {name:"AWS Workshops",level:"All",link:"https://workshops.aws/"},
+  {name:"AWS AI Explorer",level:"All",link:"https://aiexplorer.aws.amazon.com/?lang=en"},
+  {name:"AWS What's New",level:"All",link:"https://aws.amazon.com/new/"}
+];
+
+var GENAI = [
+  {id:1,title:"AWS Partner: Generative AI Sales",badge:"AWS Badge",dur:"2h 30m",aud:"Sales / Customer-facing professionals"},
+  {id:2,title:"Generative AI on AWS Essentials (Business)",badge:"AWS Badge",dur:"45 mins",aud:"Business / non-technical"},
+  {id:3,title:"IBM Generative AI Foundation",badge:"IBM Gen AI Foundation Badge",dur:"13 hrs",aud:"All IBM Consulting"},
+  {id:5,title:"IBM Generative AI Developer",badge:"IBM Gen AI Experienced Badge",dur:"16 hrs",aud:"Senior Developers"},
+  {id:6,title:"IBM Generative AI Architect",badge:"IBM Gen AI Experienced Badge",dur:"16 hrs",aud:"Architects, Solution Architects"},
+  {id:7,title:"IBM Generative AI Data Scientist",badge:"IBM Gen AI Experienced Badge",dur:"6h 10m",aud:"Senior Data Scientists"},
+  {id:8,title:"IBM Generative AI Consultant/PM",badge:"IBM Gen AI Experienced Badge",dur:"11h 5m",aud:"Consultants, Project Managers"},
+  {id:9,title:"IBM Generative AI Designer",badge:"IBM Gen AI Experienced Badge",dur:"11h 5m",aud:"Designers"},
+  {id:10,title:"IBM Generative AI Developer - Expert",badge:"IBM Gen AI Expert Badge",dur:"16 hrs",aud:"Senior Developers (Live Bootcamp)"},
+  {id:11,title:"IBM Generative AI Architect - Expert",badge:"IBM Gen AI Expert Badge",dur:"16 hrs",aud:"Architects (Live Bootcamp)"},
+  {id:12,title:"IBM Generative AI Data Scientist - Expert",badge:"IBM Gen AI Expert Badge",dur:"16 hrs",aud:"Data Scientists (Live Bootcamp)"},
+  {id:13,title:"IBM Generative AI Consultant/PM - Expert",badge:"IBM Gen AI Expert Badge",dur:"16 hrs",aud:"Consultants, PMs (Live Bootcamp)"},
+  {id:14,title:"IBM Generative AI Designer - Expert",badge:"IBM Gen AI Expert Badge",dur:"16 hrs",aud:"Designers (Live Bootcamp)"}
+];
+
+var RES_TABS = ["Tech Talks","Immersion Days","Discovery Series","Hackathon","IBM Blogs"];
+var RES = {
+  "Tech Talks":[
+    {name:"AWS re:Invent Recap 2023",year:"2024",link:"https://w3.ibm.com/services/lighthouse/videos/122372"},
+    {name:"AWS IoT solution on waste management",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10329526"},
+    {name:"Containerizing API Applications on AWS with ROSA",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10339365"},
+    {name:"Migrate on-prem data pipelines to AWS for a large European bank",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10354622"},
+    {name:"Cloud Migration and Modernization on AWS with client journeys",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10367790"},
+    {name:"Working with AWS Step Functions",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10354622"},
+    {name:"Cloud Native AWS Modernization Journey for Mission Critical application",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10374001"},
+    {name:"Migration from Oracle19 to AWS RDS PostgreSQL",year:"2023",link:"https://ec.yourlearning.ibm.com/w3/playback/10400494"}
+  ],
+  "Immersion Days":[
+    {name:"Control Tower Part 1 and 2",link:"https://ec.yourlearning.ibm.com/w3/playback/10208820"},
+    {name:"Windows Workload on AWS",link:"https://ec.yourlearning.ibm.com/w3/playback/10322526"},
+    {name:"Microservices",link:"https://ec.yourlearning.ibm.com/w3/playback/10322525"},
+    {name:"Container",link:"https://ec.yourlearning.ibm.com/w3/playback/10322524"},
+    {name:"DevOps in AWS Part 1",link:"https://ec.yourlearning.ibm.com/w3/playback/10322523"},
+    {name:"DevOps AWS Part 2",link:"https://ec.yourlearning.ibm.com/w3/playback/10337295"},
+    {name:"AWS Immersion Services",link:"https://ec.yourlearning.ibm.com/w3/playback/10323271"},
+    {name:"Event Driven Architecture",link:"https://ec.yourlearning.ibm.com/w3/playback/10326618"},
+    {name:"IoT Opportunities in AWS",link:"https://ec.yourlearning.ibm.com/w3/playback/10339334"}
+  ],
+  "Discovery Series":[
+    {name:"AWS Discovery Series - Migration",link:"https://ec.yourlearning.ibm.com/w3/playback/10419633"},
+    {name:"AWS Discovery Series - Serverless",link:"https://ec.yourlearning.ibm.com/w3/playback/10419634"},
+    {name:"AWS Discovery Series - Gen AI",link:"https://ec.yourlearning.ibm.com/w3/playback/10421379"},
+    {name:"AWS Discovery Series - Modernization",link:"https://ec.yourlearning.ibm.com/w3/playback/10423085"},
+    {name:"AWS Discovery Series - Machine Learning",link:"https://ec.yourlearning.ibm.com/w3/playback/10425337"}
+  ],
+  "Hackathon":[
+    {name:"HCT Service Line Assets and Assistants Playback",link:"https://ec.yourlearning.ibm.com/w3/playback/10473092"},
+    {name:"IBM-AWS Hackathon Process, Team Formation, AWS System Access",link:"https://ec.yourlearning.ibm.com/w3/playback/10473095"},
+    {name:"PoC: WebSphere workload to EKS/ROSA",link:"https://ec.yourlearning.ibm.com/w3/playback/10473096"},
+    {name:"PoC: Monolith JEE to Microservices",link:"https://ec.yourlearning.ibm.com/w3/playback/10473098"},
+    {name:"Code Explainability using AWS Bedrock/LLMs (Mainframe mod)",link:"https://ec.yourlearning.ibm.com/w3/playback/10473097"},
+    {name:"PoC: AWS Industry use cases",link:"https://ec.yourlearning.ibm.com/w3/playback/10473093"},
+    {name:"Gen AI: AWS Bedrock SageMaker Hands On",link:"https://ec.yourlearning.ibm.com/w3/playback/10473090"},
+    {name:"PoC: Cloud Migration Patterns",link:"https://ec.yourlearning.ibm.com/w3/playback/10473187"},
+    {name:"PoC: On-prem database to RDS",link:"https://ec.yourlearning.ibm.com/w3/playback/10473125"},
+    {name:"Code Conversion: Java 8/11 to 17",link:"https://ec.yourlearning.ibm.com/w3/playback/10473191"}
+  ],
+  "IBM Blogs":[
+    {name:"Solutions for Migrating Unstructured Data from On-Premises to AWS",by:"Rakesh Rao, Santhosh Kumar Ramabadran, Chandrashekhar Ghaitade",link:"https://www.ibm.com/cloud/blog/solutions-for-migrating-unstructured-data-from-on-premises-to-aws"},
+    {name:"How AWS SageMaker Ground Truth speeds up cancer identification",by:"Venkateswaran.N",link:"https://venkatarchitect.medium.com/how-aws-sagemaker-ground-truth-helps-in-cancer-identification-117970e848bf"},
+    {name:"Rethinking Scrum for Effective AWS Containerization Projects",by:"Venkateswaran.N",link:"https://medium.com/@venkatarchitect/rethinking-scrum-for-effective-aws-containerization-projects-64ec18a8d766"},
+    {name:"Trustworthy AI with MLOps on AWS",by:"Surabhi Srivastava, Rohit Singh, Ram Nagarajan et al.",link:"https://developer.ibm.com/articles/trustworthy-ai-with-mlops-on-aws/"},
+    {name:"Enable SFTP integration for containerized apps",by:"Santhosh Kumar Ramabadran, Rakesh Rao",link:"https://developer.ibm.com/blogs/enable-sftp-integration-for-containerized-apps/"},
+    {name:"Untangle connection pool knots in AWS Cloud container applications",by:"Venkateswaran.N",link:"https://developer.ibm.com/blogs/untangle-connection-pool-knots-in-aws-cloud-container-applications/"},
+    {name:"SAP S/4 HANA Upgrade and Migration to Cloud in a Single Outage Window",by:"",link:"https://www.ibm.com/cloud/blog/sap-s/4-hana-upgrade-and-migration-to-cloud-in-a-single-outage-window"},
+    {name:"Sustainable App Modernization Using AWS Cloud",by:"Charbak Roy, Sreejit Roy, Diptiman Dasgupta, Dhana Vadivelan",link:"https://www.ibm.com/blog/sustainable-app-modernization-using-aws-cloud/"}
+  ]
+};
+
+var RESKILLING = [
+  {name:"AWS FullStack Reskilling for Application Developers",link:"https://lksprod.dst.ibm.com/lkw/v0/xapp/mp/?v=27637420&id=775"},
+  {name:"AWS Migration Reskilling for Application Architects",link:"https://lksprod.dst.ibm.com/collection/goto?id=667"},
+  {name:"AWS Migration Reskilling for Application Developers",link:"https://lksprod.dst.ibm.com/collection/goto?id=666"},
+  {name:"AWS Cloud Project Manager Reskilling Path",link:"https://lksprod.dst.ibm.com/collection/goto?id=335"},
+  {name:"AWS Cloud Architect Reskilling Path",link:"https://lksprod.dst.ibm.com/collection/goto?id=335"},
+  {name:"AWS Cloud Consultant Reskilling Path",link:"https://lksprod.dst.ibm.com/collection/goto?id=335"}
+];
+var ACCOUNTS = [
+  {name:"Empower (Prudential)",link:"https://yourlearning.ibm.com/activity/PLAN-0E95A14FA22A"},
+  {name:"AWS Developer Reskilling - AWS Data and AWS DevOps",link:"https://yourlearning.ibm.com/activity/PLAN-18E9586F797F"}
+];
+var WAF = [
+  {name:"AWS PartnerCast - Well-Architected practice to drive business",link:"https://ibm.biz/wellarchitectedpractice",note:"Password: AWSTraining2023"}
+];
+var TOURNAMENTS = [
+  {name:"IBM AWS Gen AI Gamethon",kickoff:"2026-03-06",ends:"2026-03-20",link:"https://w3.ibm.com/services/lighthouse/videos/144370"}
+];
+
+var FAQS = [
+  {id:1,q:"How do I start the certification process?",a:"Refer to the CIC India Certification Process.",tags:["certification","process","getting started"]},
+  {id:2,q:"What do I choose under HCAM? Yes or No?",a:"If you are an onshore employee select HCAM as Yes, otherwise HCAM is No and Offshore. L&K India does not provide voucher to HCAM employees.",tags:["hcam","lrt","onshore","offshore"]},
+  {id:3,q:"Do we need manager approval for raising a certification request on LRT?",a:"No.",tags:["lrt","manager","approval"]},
+  {id:4,q:"What is the exam date on LRT?",a:"It is a tentative date you plan to give the actual exam. Give the exam 1-2 weeks within the planned date. You can also give the exam before the date mentioned if you are prepared.",tags:["lrt","exam date","scheduling"]},
+  {id:5,q:"How long does it take for the voucher to arrive once I apply in LRT?",a:"Typically 5-7 working days for approval. The voucher is given within a week as per your planned exam date. Also refer to the CAP timeline.",tags:["voucher","lrt","timeline","cap"]},
+  {id:6,q:"Can you share the Udemy links to prepare for the exam?",a:"Refer to the Learning Resource Page.",tags:["udemy","learning","preparation","resources"]},
+  {id:7,q:"Where can I get all the recordings of sessions?",a:"Refer to the Learning Resource Page for internal recorded sessions. AWS External sessions are not recorded as per partner policy.",tags:["recordings","sessions","learning","resources"]},
+  {id:8,q:"How do I use a voucher / Voucher shows invalid / Error in voucher?",a:"Refer to the voucher usage guidelines.",tags:["voucher","error","invalid","guidelines"]},
+  {id:9,q:"What is CAP?",a:"CAP or Certification Acceleration Program was launched for driving foundational level certifications across all areas.",tags:["cap","certification","program"]},
+  {id:10,q:"How to claim hours on training attended?",a:"You will get credits for all learning sessions. You may also get credits for external training by adding new learning in YourLearning. You may also claim ILC through AALEARN2.",tags:["hours","credits","yourlearning","ilc","aalearn2"]},
+  {id:11,q:"Can we schedule AWS exam using corporate card and claim reimbursement?",a:"No. You will be provided with a voucher after which you may schedule the exam. Reimbursements for AWS are not entertained.",tags:["corporate card","reimbursement","voucher","scheduling"]},
+  {id:12,q:"What email should I use for scheduling exams?",a:"Always use your IBM ID. Usage of personal email will be considered a business violation.",tags:["email","ibm id","scheduling","policy"]},
+  {id:13,q:"Create Request on LRT is not enabled. What do I do?",a:"LRT is enabled for all IBM Consulting Practitioners. Connect with the L&K unit. Contact the CAP team for clarification or resolution.",tags:["lrt","create request","issue","cap"]},
+  {id:14,q:"Can I raise multiple requests on LRT?",a:"At any time you can only raise one record at a time. You need to close or cancel that record before raising a fresh request.",tags:["lrt","multiple requests","policy"]},
+  {id:15,q:"What is the LRT Approval Escalation matrix?",a:"Click here for details (refer to the LRT escalation matrix link on the IBM W3 page).",tags:["lrt","escalation","approval"]},
+  {id:16,q:"Who is my Sector Primus for nominating for Enablement sessions?",a:"Sector Primus list is available on the IBM W3 page. Please connect with them for more details.",tags:["sector primus","enablement","nomination"]},
+  {id:17,q:"When can I raise a certification request?",a:"Request through LRT is open any time of the year.",tags:["lrt","timing","request"]},
+  {id:18,q:"What do I do after I clear the certification?",a:"Update YourLearning and LRT with your achievement. Ensure Credly and W3 reflect your achievement. Close LRT as Completed.",tags:["post certification","yourlearning","credly","w3","lrt","achievement"]},
+  {id:19,q:"What AWS Certification should I do for my experience level?",a:"Refer to https://ibm.biz/AWSCertGuide. You can also connect with experienced AWS experts for guidance on the right certification to take.",tags:["certification choice","experience","guidance"]},
+  {id:20,q:"AWS Exam Scheduling Guide - where is it?",a:"Refer to: https://w3.ibm.com/w3publisher/certification-exam-scheduling-guides/aws-cert-scheduling-guide",tags:["scheduling","exam","guide"]},
+  {id:21,q:"How do I get the AWS Skill Builder License?",a:"Given for an active LRT request for Associate and above (Pro and Specialty). Fill the form: https://w3.ibm.com/w3publisher/lkindia-aws-information/aws-skill-builder-collation-form",tags:["skill builder","license","lrt","associate","professional","specialty"]},
+  {id:22,q:"Credly is not reflecting my latest AWS Certification. What do I do?",a:"Raise a support ticket through AWS at: https://www.aws.training/certification",tags:["credly","certification","support","ticket"]},
+  {id:23,q:"My cert appears in Credly but not in W3 or YourLearning. What do I do?",a:"Enable Credly Connect at: https://w3.ibm.com/w3publisher/credly-and-credential-vendor-settings",tags:["credly","w3","yourlearning","connect","credentials"]},
+  {id:24,q:"I want to return a voucher. Is it possible?",a:"While not recommended, mark LRT as Did Not Take Exam and return the voucher. Ensure it has not been used to schedule any exam. Connect with the certification team for guidance.",tags:["voucher","return","lrt","did not take"]},
+  {id:25,q:"I am unable to find my AWS ID or I do not remember my login details.",a:"Try logging in with the personal email used during certification. If still having issues, raise a support ticket with AWS.",tags:["aws id","login","support","credentials"]},
+  {id:26,q:"How many attempts can I take on a single voucher?",a:"Only one attempt per voucher is allowed.",tags:["voucher","attempts","policy"]},
+  {id:27,q:"Is there another attempt if I do not clear the exam the first time?",a:"Yes. Close the LRT as Failed and raise a fresh request. Cool-off period: 15 days for Foundation and Associate level, 1 month for Professional and Specialty.",tags:["attempt","failed","retry","cool off","foundation","associate","professional","specialty","lrt"]}
+];
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+
+function du(d) { return Math.ceil((new Date(d) - Date.now()) / 86400000); }
+function x(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function catBadge(c) {
+  var m={Certification:"b-blue",Course:"b-green",PartnerCast:"b-yellow",Series:"b-purple"};
+  return '<span class="badge '+(m[c]||"b-gray")+'">'+x(c)+'</span>';
+}
+function lvBadge(l) {
+  var m={Foundation:"b-green",Associate:"b-blue",Professional:"b-purple",Specialty:"b-red",All:"b-gray"};
+  return '<span class="badge '+(m[l]||"b-gray")+'">'+x(l)+'</span>';
+}
+function lnk(href, label) {
+  if (!href) return "";
+  return '<a href="'+x(href)+'" target="_blank" rel="noopener">'+label+'</a>';
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+
+function show(id) {
+  var pages = document.querySelectorAll(".page");
+  for (var i=0;i<pages.length;i++) pages[i].classList.remove("active");
+  var navs = document.querySelectorAll("nav a");
+  for (var i=0;i<navs.length;i++) navs[i].classList.remove("active");
+  document.getElementById("page-"+id).classList.add("active");
+  document.getElementById("nav-"+id).classList.add("active");
+  var map = {
+    dashboard:renderDashboard,
+    calendar:renderCalendar,
+    enrolments:renderEnrolments,
+    certs:renderCerts,
+    genai:renderGenAI,
+    workshops:renderWorkshops,
+    resources:renderResources,
+    reskilling:renderReskilling,
+    faq:renderFAQ
+  };
+  if (map[id]) map[id]();
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────────────────────
+
+function renderCalendar() {
+  var kw = document.getElementById("cal-kw").value.toLowerCase();
+  var cat = document.getElementById("cal-cat").value;
+  var rows = EVENTS.filter(function(e){
+    return (!kw || e.title.toLowerCase().indexOf(kw)>=0) && (!cat || e.category===cat);
+  });
+  var body = document.getElementById("cal-tbody");
+  if (!rows.length) { body.innerHTML='<tr><td colspan="8" class="empty">No events found.</td></tr>'; return; }
+  body.innerHTML = rows.map(function(e){
+    var d=du(e.sd);
+    var dc = d>0 ? '<span style="color:var(--success);font-weight:600">in '+d+'d</span>'
+           : d===0 ? '<span style="color:var(--warn);font-weight:600">TODAY</span>'
+           : '<span style="color:var(--muted)">'+Math.abs(d)+'d ago</span>';
+    return '<tr>'
+      +'<td style="color:var(--muted)">'+e.id+'</td>'
+      +'<td style="font-weight:500;max-width:280px">'+x(e.title)+'</td>'
+      +'<td>'+catBadge(e.category)+'</td>'
+      +'<td style="white-space:nowrap;color:var(--muted)">'+e.ts+'-'+e.te+'</td>'
+      +'<td style="white-space:nowrap">'+e.sd+'</td>'
+      +'<td style="white-space:nowrap">'+e.ed+'</td>'
+      +'<td>'+dc+'</td>'
+      +'<td>'+lnk(e.link,"Enrol")+'</td>'
+      +'</tr>';
+  }).join("");
+}
+
+// ── CERTIFICATIONS ────────────────────────────────────────────────────────────
+
+function renderCerts() {
+  var kw = document.getElementById("cert-kw").value.toLowerCase();
+  var lv = document.getElementById("cert-lv").value;
+  var levels = ["Foundation","Associate","Professional","Specialty"];
+  var html = "";
+  levels.forEach(function(level){
+    if (lv && lv!==level) return;
+    var items = CERTS.filter(function(c){ return c.level===level && (!kw || c.name.toLowerCase().indexOf(kw)>=0); });
+    if (!items.length) return;
+    html += '<div class="sttl">'+level+'</div><div class="card-grid">';
+    html += items.map(function(c){
+      return '<div class="card">'
+        +'<h3>'+x(c.name)+'</h3>'
+        +'<div class="cmeta">'+lvBadge(c.level)+'</div>'
+        +(c.notes?'<div style="font-size:11px;color:var(--muted);margin-bottom:6px">'+x(c.notes)+'</div>':"")
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+        +(c.ibm?lnk(c.ibm,"IBM Learning"):"")
+        +(c.aws?lnk(c.aws,"AWS Official"):"")
+        +'</div></div>';
+    }).join("")+"</div>";
+  });
+  document.getElementById("cert-cards").innerHTML = html || '<div class="empty">No certifications matched.</div>';
+  document.getElementById("cpe-ul").innerHTML = CPE.map(function(m){
+    return '<li><span class="t"><strong>'+x(m.m)+'</strong>: '+x(m.t)+'</span>'+lnk(m.link,"Watch")+'</li>';
+  }).join("");
+  document.getElementById("ext-ul").innerHTML = EXT.map(function(p){
+    return '<li><span class="t">'+lvBadge(p.level)+' '+x(p.name)+'</span>'+lnk(p.link,"Open")+'</li>';
+  }).join("");
+}
+
+// ── GEN AI ────────────────────────────────────────────────────────────────────
+
+function renderGenAI() {
+  var kw = document.getElementById("genai-kw").value.toLowerCase();
+  var rows = GENAI.filter(function(p){
+    return !kw || p.title.toLowerCase().indexOf(kw)>=0 || p.aud.toLowerCase().indexOf(kw)>=0 || p.badge.toLowerCase().indexOf(kw)>=0;
+  });
+  var body = document.getElementById("genai-tbody");
+  if (!rows.length) { body.innerHTML='<tr><td colspan="6" class="empty">No results.</td></tr>'; return; }
+  body.innerHTML = rows.map(function(p){
+    var bc = p.title.indexOf("Expert")>=0 ? "b-purple" : p.title.indexOf("Foundation")>=0 ? "b-green" : "b-blue";
+    return '<tr>'
+      +'<td style="color:var(--muted)">'+p.id+'</td>'
+      +'<td style="font-weight:500">'+x(p.title)+'</td>'
+      +'<td><span class="badge '+bc+'" style="white-space:normal;font-size:10px">'+x(p.badge)+'</span></td>'
+      +'<td style="white-space:nowrap">'+x(p.dur)+'</td>'
+      +'<td style="color:var(--muted);font-size:12px">'+x(p.aud)+'</td>'
+      +'<td>'+lnk("https://yourlearning.ibm.com","IBM Learning")+'</td>'
+      +'</tr>';
+  }).join("");
+}
+
+// ── RESOURCES ─────────────────────────────────────────────────────────────────
+
+var activeResTab = RES_TABS[0];
+
+function renderResources() {
+  var kw = document.getElementById("res-kw").value.toLowerCase();
+  // Tabs — use index to avoid spaces in onclick
+  document.getElementById("res-tabs").innerHTML = RES_TABS.map(function(k,i){
+    return '<div class="tab'+(k===activeResTab?" active":"")+ '" onclick="setResTab('+i+')">'+x(k)+'</div>';
+  }).join("");
+  var items = RES[activeResTab].filter(function(r){
+    return !kw || r.name.toLowerCase().indexOf(kw)>=0 || (r.by||"").toLowerCase().indexOf(kw)>=0 || (r.year||"").indexOf(kw)>=0;
+  });
+  var body = document.getElementById("res-body");
+  if (!items.length) { body.innerHTML='<div class="empty">No results in '+x(activeResTab)+'.</div>'; return; }
+  body.innerHTML = '<ul class="ll">'+items.map(function(r){
+    var sub = r.year ? ' <span style="color:var(--muted);font-size:11px">- '+r.year+'</span>'
+             : r.by  ? ' <span style="color:var(--muted);font-size:11px">- '+x(r.by)+'</span>' : "";
+    return '<li><span class="t">'+x(r.name)+sub+'</span>'+(r.link?lnk(r.link,"Watch"):"")+'</li>';
+  }).join("")+'</ul>';
+}
+
+function setResTab(i) {
+  activeResTab = RES_TABS[i];
+  renderResources();
+}
+
+// ── RESKILLING ────────────────────────────────────────────────────────────────
+
+function renderReskilling() {
+  document.getElementById("reskill-ul").innerHTML = RESKILLING.map(function(r){
+    return '<li><span class="t">'+x(r.name)+'</span>'+lnk(r.link,"Open")+'</li>';
+  }).join("");
+  document.getElementById("account-ul").innerHTML = ACCOUNTS.map(function(a){
+    return '<li><span class="t">'+x(a.name)+'</span>'+lnk(a.link,"Open")+'</li>';
+  }).join("");
+  document.getElementById("waf-ul").innerHTML = WAF.map(function(w){
+    return '<li><span class="t">'+x(w.name)+' <span style="color:var(--muted);font-size:11px">('+x(w.note||"")+')</span></span>'+lnk(w.link,"Watch")+'</li>';
+  }).join("");
+  document.getElementById("tournament-ul").innerHTML = TOURNAMENTS.map(function(t){
+    return '<li><span class="t">'+x(t.name)+' <span style="color:var(--muted);font-size:11px">'+t.kickoff+' to '+t.ends+'</span></span>'+lnk(t.link,"Open")+'</li>';
+  }).join("");
+}
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+
+function renderFAQ() {
+  var kw  = (document.getElementById("faq-kw").value||"").toLowerCase();
+  var tag = (document.getElementById("faq-tag").value||"").toLowerCase();
+  var results = FAQS.filter(function(f){
+    var mk = !kw  || f.q.toLowerCase().indexOf(kw)>=0 || f.a.toLowerCase().indexOf(kw)>=0 || f.tags.join(" ").indexOf(kw)>=0;
+    var mt = !tag || f.tags.join(" ").indexOf(tag)>=0;
+    return mk && mt;
+  });
+  document.getElementById("faq-count").textContent = "Showing "+results.length+" of "+FAQS.length+" questions";
+  document.getElementById("faq-body").innerHTML = results.length
+    ? results.map(function(f){
+        return '<div class="faq-item">'
+          +'<div class="faq-q" onclick="toggleFaq('+f.id+')">'
+          +'<span>Q'+f.id+': '+x(f.q)+'</span>'
+          +'<span id="chv-'+f.id+'">&#9660;</span>'
+          +'</div>'
+          +'<div class="faq-a" id="fa-'+f.id+'">'+x(f.a)+'</div>'
+          +'<div class="faq-tags" id="ft-'+f.id+'">'+f.tags.map(function(t){ return '<span class="badge b-gray">'+x(t)+'</span>'; }).join("")+'</div>'
+          +'</div>';
+      }).join("")
+    : '<div class="empty">No FAQ entries matched.</div>';
+}
+
+function toggleFaq(id) {
+  var a = document.getElementById("fa-"+id);
+  var t = document.getElementById("ft-"+id);
+  var c = document.getElementById("chv-"+id);
+  var open = a.classList.toggle("open");
+  t.classList.toggle("open", open);
+  c.innerHTML = open ? "&#9650;" : "&#9660;";
+}
+
+// ── RECOMMENDER ───────────────────────────────────────────────────────────────
+
+function recommend() {
+  var role  = document.getElementById("rec-role").value;
+  var level = document.getElementById("rec-level").value;
+  var goal  = document.getElementById("rec-goal").value;
+  if (!role) { alert("Please select a role."); return; }
+  var rl=role.toLowerCase(), gl=goal.toLowerCase();
+  var L=["Learning Path for: "+role+"  |  "+level+(goal?"  |  "+goal:"")+"\n"];
+  if (level==="beginner") {
+    L.push("START HERE - Foundation");
+    L.push("  AWS Certified Cloud Practitioner\n  https://yourlearning.ibm.com/activity/PLAN-0149BED84CC5");
+    L.push("  CPE Bootcamp (13 recorded modules)\n  https://w3.ibm.com/services/lighthouse/videos/109763\n");
+  }
+  if (gl.indexOf("gen ai")>=0||gl.indexOf("generative")>=0) {
+    L.push("Gen AI Path");
+    if (rl.indexOf("developer")>=0||rl.indexOf("architect")>=0) L.push("  AWS Certified Generative AI Developer - Professional\n  https://yourlearning.ibm.com/activity/UDEMY-6928347");
+    if (rl.indexOf("data")>=0) L.push("  IBM Generative AI Data Scientist\n  https://yourlearning.ibm.com");
+    if (rl.indexOf("sales")>=0||rl.indexOf("consultant")>=0) L.push("  AWS Partner: Generative AI Sales (2h 30m)");
+    L.push("  AWS Discovery Series - Gen AI\n  https://ec.yourlearning.ibm.com/w3/playback/10421379");
+    L.push("  IBM AWS Gen AI Gamethon\n  https://w3.ibm.com/services/lighthouse/videos/144370\n");
+  }
+  if (rl.indexOf("architect")>=0) {
+    L.push("Architecture Path");
+    if (level!=="expert") L.push("  AWS Certified Solution Architect - Associate\n  https://yourlearning.ibm.com/activity/PLAN-9CA8E9AAA409");
+    if (level!=="beginner") L.push("  AWS Certified Solutions Architect - Professional\n  https://yourlearning.ibm.com/activity/PLAN-14CA33A3EC94");
+    L.push("  Well-Architected Framework PartnerCast\n  https://ibm.biz/wellarchitectedpractice  (Password: AWSTraining2023)\n");
+  }
+  if (rl.indexOf("developer")>=0) {
+    L.push("Developer Path");
+    if (level!=="expert") L.push("  AWS Certified Developer - Associate\n  https://yourlearning.ibm.com/activity/PLAN-D7A55914AB99");
+    if (level==="expert") L.push("  AWS Certified DevOps Engineer - Professional\n  https://yourlearning.ibm.com/activity/PLAN-09619BF9E491");
+    L.push("  AWS FullStack Reskilling\n  https://lksprod.dst.ibm.com/lkw/v0/xapp/mp/?v=27637420&id=775\n");
+  }
+  if (rl.indexOf("devops")>=0||rl.indexOf("sysops")>=0) {
+    L.push("Ops Path");
+    L.push("  AWS Certified SysOps Administrator - Associate\n  https://yourlearning.ibm.com/activity/PLAN-D3830A921C06/track-progress");
+    L.push("  AWS Certified DevOps Engineer - Professional\n  https://yourlearning.ibm.com/activity/PLAN-09619BF9E491\n");
+  }
+  if (rl.indexOf("data")>=0||rl.indexOf("scientist")>=0||gl.indexOf("machine learning")>=0) {
+    L.push("Data and ML Path");
+    L.push("  AWS Certified Machine Learning Engineer - Associate\n  https://yourlearning.ibm.com/activity/PLAN-C5498711CF81");
+    if (level==="expert") L.push("  AWS Certified Machine Learning - Specialty\n  https://yourlearning.ibm.com/activity/PLAN-42E4D536A9E1");
+    L.push("  AWS Discovery Series - Machine Learning\n  https://ec.yourlearning.ibm.com/w3/playback/10425337\n");
+  }
+  if (gl.indexOf("security")>=0||rl.indexOf("security")>=0) {
+    L.push("Security Path");
+    L.push("  AWS Certified Security - Specialty\n  https://yourlearning.ibm.com/activity/PLAN-2D05C80F7472");
+    L.push("  Security Engineer Partner Learning Plan\n  https://explore.skillbuilder.aws/learn/learning_plan/view/112/security-engineer-partner-learning-plan\n");
+  }
+  if (gl.indexOf("migration")>=0) {
+    L.push("Migration Path");
+    L.push("  AWS Migration Reskilling for Architects\n  https://lksprod.dst.ibm.com/collection/goto?id=667");
+    L.push("  AWS Discovery Series - Migration\n  https://ec.yourlearning.ibm.com/w3/playback/10419633\n");
+  }
+  if (rl.indexOf("network")>=0) {
+    L.push("Networking Path");
+    L.push("  AWS Certified Advanced Networking - Specialty\n  https://yourlearning.ibm.com/activity/PLAN-A9447D0DD1A3\n");
+  }
+  L.push("Always Useful");
+  L.push("  Cert guide:       https://ibm.biz/AWSCertGuide");
+  L.push("  AWS Workshops:    https://workshops.aws/");
+  L.push("  AWS AI Explorer:  https://aiexplorer.aws.amazon.com/");
+  L.push("  AWS What's New:   https://aws.amazon.com/new/");
+  var box = document.getElementById("rec-result");
+  box.textContent = L.join("\n");
+  box.classList.add("v");
+}
+
+// ── CHATBOT ENGINE ────────────────────────────────────────────────────────────
+
+var chatHistory = [];
+var chatReady   = false;
+
+function ts() {
+  var d=new Date();
+  return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+}
+
+function addMsg(role, html) {
+  var msgs = document.getElementById('chat-msgs');
+  var div  = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = '<div class="bubble">' + html + '</div><div class="msg-time">' + ts() + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  var msgs = document.getElementById('chat-msgs');
+  var div  = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  var el = document.getElementById('typing-indicator');
+  if (el) el.parentNode.removeChild(el);
+}
+
+function chipAsk(q) {
+  document.getElementById('chat-in').value = q;
+  sendChat();
+}
+
+function sendChat() {
+  var input = document.getElementById('chat-in');
+  var q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  addMsg('user', x(q));
+  showTyping();
+  setTimeout(function(){ removeTyping(); addMsg('bot', botAnswer(q)); }, 400);
+}
+
+// ── Bot answer logic ──────────────────────────────────────────────────────────
+
+function botAnswer(q) {
+  var ql = q.toLowerCase();
+  var parts = [];
+
+  // ---- FAQ match (strongest signal) ----
+  var faqHits = FAQS.filter(function(f){
+    return f.q.toLowerCase().indexOf(ql)>=0
+        || f.a.toLowerCase().indexOf(ql)>=0
+        || f.tags.join(' ').indexOf(ql)>=0
+        || ql.split(' ').some(function(w){ return w.length>3 && (f.q.toLowerCase().indexOf(w)>=0 || f.tags.join(' ').indexOf(w)>=0); });
+  });
+  if (faqHits.length) {
+    var top = faqHits.slice(0,3);
+    parts.push('<strong>From the FAQ:</strong>');
+    top.forEach(function(f){
+      parts.push('<b>Q: '+x(f.q)+'</b><br>'+x(f.a));
+    });
+  }
+
+  // ---- Calendar / events ----
+  var isCalQ = /event|calendar|session|coming|upcoming|schedule|when|class|course|partnercast|series/i.test(ql);
+  if (isCalQ) {
+    var evHits = EVENTS.filter(function(e){
+      return e.title.toLowerCase().indexOf(ql)>=0
+          || e.category.toLowerCase().indexOf(ql)>=0
+          || ql.split(' ').some(function(w){ return w.length>3 && e.title.toLowerCase().indexOf(w)>=0; });
+    });
+    if (!evHits.length) evHits = EVENTS.slice(); // show all if generic "events" question
+    evHits = evHits.slice(0,4);
+    parts.push('<strong>Training Events:</strong>');
+    evHits.forEach(function(e){
+      var d=du(e.sd), dc=d>0?'in '+d+'d':d===0?'TODAY':Math.abs(d)+'d ago';
+      parts.push(catBadge(e.category)+' <b>'+x(e.title)+'</b><br>'+e.sd+' ('+dc+') '+e.ts+'-'+e.te
+        +'<br><a href="'+x(e.link)+'" target="_blank">Enrol &rarr;</a>');
+    });
+  }
+
+  // ---- Certifications ----
+  var isCertQ = /certif|associate|professional|specialty|foundation|architect|developer|sysops|devops|networking|security cert|machine learn|generative ai/i.test(ql);
+  if (isCertQ) {
+    var cHits = CERTS.filter(function(c){
+      return c.name.toLowerCase().indexOf(ql)>=0
+          || c.level.toLowerCase().indexOf(ql)>=0
+          || ql.split(' ').some(function(w){ return w.length>3 && c.name.toLowerCase().indexOf(w)>=0; });
+    });
+    if (cHits.length) {
+      parts.push('<strong>AWS Certifications:</strong>');
+      cHits.slice(0,4).forEach(function(c){
+        parts.push(lvBadge(c.level)+' <b>'+x(c.name)+'</b>'
+          +(c.ibm?'<br><a href="'+x(c.ibm)+'" target="_blank">IBM Learning &rarr;</a>':'')
+          +(c.aws?' &nbsp;<a href="'+x(c.aws)+'" target="_blank">AWS Official &rarr;</a>':''));
+      });
+    }
+  }
+
+  // ---- Gen AI ----
+  var isGenAI = /gen ai|genai|generative|bedrock|llm|foundation model/i.test(ql);
+  if (isGenAI) {
+    var gHits = GENAI.filter(function(p){
+      return p.title.toLowerCase().indexOf(ql)>=0
+          || p.aud.toLowerCase().indexOf(ql)>=0
+          || ql.split(' ').some(function(w){ return w.length>3 && (p.title.toLowerCase().indexOf(w)>=0||p.aud.toLowerCase().indexOf(w)>=0); });
+    });
+    if (!gHits.length) gHits = GENAI.slice(0,5);
+    parts.push('<strong>Gen AI Learning Paths:</strong>');
+    gHits.slice(0,4).forEach(function(p){
+      var bc=p.title.indexOf('Expert')>=0?'b-purple':p.title.indexOf('Foundation')>=0?'b-green':'b-blue';
+      parts.push('<span class="badge '+bc+'">'+x(p.badge)+'</span> <b>'+x(p.title)+'</b> &mdash; '+x(p.dur)+'<br><small style="color:var(--muted)">'+x(p.aud)+'</small>');
+    });
+  }
+
+  // ---- Resources (tech talks, immersion, blogs) ----
+  var isRes = /talk|immersion|discovery|hackathon|blog|recording|playback|series|serverless|migration|moderniz/i.test(ql);
+  if (isRes) {
+    var rHits = [];
+    RES_TABS.forEach(function(tab){
+      RES[tab].forEach(function(r){
+        if (r.name.toLowerCase().indexOf(ql)>=0 || ql.split(' ').some(function(w){ return w.length>3 && r.name.toLowerCase().indexOf(w)>=0; }))
+          rHits.push({tab:tab,r:r});
+      });
+    });
+    if (rHits.length) {
+      parts.push('<strong>Resources:</strong>');
+      rHits.slice(0,4).forEach(function(h){
+        parts.push('<span class="badge b-gray">'+x(h.tab)+'</span> <b>'+x(h.r.name)+'</b>'
+          +(h.r.link?'<br><a href="'+x(h.r.link)+'" target="_blank">Watch &rarr;</a>':''));
+      });
+    }
+  }
+
+  // ---- Role-based recommendation ----
+  var roleMatch = ql.match(/i am (a |an )?(developer|architect|data scientist|devops|sysops|consultant|sales|designer|network|security)/i)
+               || ql.match(/^(developer|architect|data scientist|devops|sysops|consultant|sales|designer|network|security) (path|cert|learning|training)/i);
+  if (roleMatch) {
+    var role = roleMatch[2] || roleMatch[1];
+    parts.push('<strong>Recommended path for ' + x(role) + ':</strong>');
+    parts.push('Use the <a href="#" onclick="show(\'recommend\');return false;">Path Recommender</a> for a full personalised plan, or ask me something more specific like "What certification should a '+x(role)+' do?"');
+  }
+
+  // ---- Reskilling ----
+  var isReskill = /reskill|reskilling|fullstack|full stack|cloud project|cloud architect|cloud consultant/i.test(ql);
+  if (isReskill) {
+    parts.push('<strong>Reskilling Tracks:</strong>');
+    RESKILLING.forEach(function(r){
+      if (r.name.toLowerCase().indexOf(ql)>=0 || ql.split(' ').some(function(w){ return w.length>4 && r.name.toLowerCase().indexOf(w)>=0; }))
+        parts.push('<b>'+x(r.name)+'</b><br><a href="'+x(r.link)+'" target="_blank">Open &rarr;</a>');
+    });
+    if (parts.length===1) { // no specific hit, list all
+      parts = [];
+      parts.push('<strong>Reskilling Tracks:</strong>');
+      RESKILLING.forEach(function(r){ parts.push('<b>'+x(r.name)+'</b><br><a href="'+x(r.link)+'" target="_blank">Open &rarr;</a>'); });
+    }
+  }
+
+  // ---- Fallback: no match ----
+  if (!parts.length) {
+    // Try partial word match across all FAQ
+    var words = ql.split(/\s+/).filter(function(w){return w.length>3;});
+    var loose = FAQS.filter(function(f){
+      return words.some(function(w){ return f.q.toLowerCase().indexOf(w)>=0 || f.tags.join(' ').indexOf(w)>=0; });
+    });
+    if (loose.length) {
+      parts.push('<strong>You might be asking about:</strong>');
+      loose.slice(0,3).forEach(function(f){
+        parts.push('<b>'+x(f.q)+'</b><br>'+x(f.a));
+      });
+    } else {
+      parts.push("I didn't find a specific match for <em>"+x(q)+"</em>. Try asking about:<br>"
+        +"&bull; A certification (e.g. \"Associate certifications\")<br>"
+        +"&bull; A topic (e.g. \"voucher\", \"LRT\", \"CAP\", \"Credly\")<br>"
+        +"&bull; Your role (e.g. \"I am a developer\")<br>"
+        +"&bull; An event (e.g. \"upcoming courses\")");
+    }
+  }
+
+  return parts.join('<hr style="border:none;border-top:1px solid var(--border);margin:8px 0">');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+
+function renderDashboard() {
+  // Next 4 events
+  var next = EVENTS.slice().sort(function(a,b){ return new Date(a.sd)-new Date(b.sd); }).slice(0,4);
+  document.getElementById("dash-events").innerHTML = next.map(function(e){
+    var d=du(e.sd);
+    var dc = d>0?'<span style="color:var(--success);font-weight:600">in '+d+'d</span>':d===0?'<span style="color:var(--warn);font-weight:600">TODAY</span>':'<span style="color:var(--muted)">'+Math.abs(d)+'d ago</span>';
+    return '<tr>'
+      +'<td style="font-weight:500;max-width:300px">'+x(e.title)+'</td>'
+      +'<td>'+catBadge(e.category)+'</td>'
+      +'<td style="white-space:nowrap">'+e.sd+'</td>'
+      +'<td>'+dc+'</td>'
+      +'<td>'+lnk(e.link,"Enrol")+'</td>'
+      +'</tr>';
+  }).join("");
+  // Featured certs (one per level)
+  var featured = ["Foundation","Associate","Professional","Specialty"].map(function(lv){
+    return CERTS.find(function(c){ return c.level===lv; });
+  }).filter(Boolean);
+  document.getElementById("dash-certs").innerHTML = featured.map(function(c){
+    return '<div class="card">'
+      +'<h3>'+x(c.name)+'</h3>'
+      +'<div class="cmeta">'+lvBadge(c.level)+'</div>'
+      +(c.ibm?lnk(c.ibm,"IBM Learning"):"")
+      +(c.aws?' '+lnk(c.aws,"AWS Official"):"")
+      +'</div>';
+  }).join("");
+}
+
+// ── MY ENROLMENTS ─────────────────────────────────────────────────────────────
+
+var myEnrolments = []; // persisted in memory during session
+
+function renderEnrolments() {
+  var filter = document.getElementById("enrol-filter").value;
+  var body = document.getElementById("enrol-body");
+  var list = filter ? myEnrolments.filter(function(e){ return e.status===filter; }) : myEnrolments;
+  if (!list.length) {
+    body.innerHTML = '<div class="enrol-empty"><div class="enrol-icon">&#128203;</div>'
+      +'<p>No enrolments yet.</p>'
+      +'<p style="margin-top:6px">Go to the <a href="#" onclick="show(\'calendar\');return false;" style="color:var(--accent)">Training Calendar</a> and click <strong>Enrol</strong> on any event.</p>'
+      +'</div>';
+    return;
+  }
+  body.innerHTML = '<div class="tw"><table>'
+    +'<thead><tr><th>Event</th><th>Type</th><th>Start</th><th>Status</th><th>Enrolled On</th></tr></thead>'
+    +'<tbody>'
+    + list.map(function(e){
+        var pill = '<span class="status-pill sp-'+e.status+'">'+e.status.charAt(0).toUpperCase()+e.status.slice(1)+'</span>';
+        return '<tr>'
+          +'<td style="font-weight:500;max-width:280px">'+x(e.title)+'</td>'
+          +'<td>'+catBadge(e.category)+'</td>'
+          +'<td style="white-space:nowrap">'+e.sd+'</td>'
+          +'<td>'+pill+'</td>'
+          +'<td style="color:var(--muted);font-size:12px">'+x(e.enrolledOn)+'</td>'
+          +'</tr>';
+      }).join("")
+    +'</tbody></table></div>';
+}
+
+function enrollEvent(id) {
+  var ev = EVENTS.find(function(e){ return e.id===id; });
+  if (!ev) return;
+  var already = myEnrolments.find(function(e){ return e.id===id; });
+  if (already) { alert("You are already enrolled in this event."); return; }
+  var today = new Date().toISOString().slice(0,10);
+  myEnrolments.push({id:ev.id,title:ev.title,category:ev.category,sd:ev.sd,status:"enrolled",enrolledOn:today});
+  alert("Enrolled in: "+ev.title);
+}
+
+// ── WORKSHOPS ─────────────────────────────────────────────────────────────────
+
+var WORKSHOPS = (function(){
+  var ws = [];
+  RES["Immersion Days"].forEach(function(r){ ws.push({cat:"Immersion Day",name:r.name,desc:"Recorded IBM-AWS immersion day session.",link:r.link}); });
+  RES["Hackathon"].forEach(function(r){ ws.push({cat:"Hackathon",name:r.name,desc:"IBM-AWS Hackathon recording.",link:r.link}); });
+  RES["Discovery Series"].forEach(function(r){ ws.push({cat:"Discovery Series",name:r.name,desc:"AWS discovery series recording.",link:r.link}); });
+  ws.push({cat:"External",name:"AWS Workshops (workshops.aws)",desc:"Self-paced hands-on labs on the official AWS workshop portal.",link:"https://workshops.aws/"});
+  ws.push({cat:"External",name:"AWS AI Explorer",desc:"Interactive Gen AI exploration on AWS.",link:"https://aiexplorer.aws.amazon.com/"});
+  ws.push({cat:"External",name:"AWS Immersion Day Portal",desc:"Official AWS immersion day labs and resources.",link:"https://catalog.us-east-1.prod.workshops.aws/"});
+  return ws;
+})();
+
+function renderWorkshops() {
+  var kw  = document.getElementById("ws-kw").value.toLowerCase();
+  var cat = document.getElementById("ws-cat").value;
+  var items = WORKSHOPS.filter(function(w){
+    return (!cat || w.cat===cat) && (!kw || w.name.toLowerCase().indexOf(kw)>=0 || w.cat.toLowerCase().indexOf(kw)>=0);
+  });
+  var grid = document.getElementById("ws-grid");
+  if (!items.length) { grid.innerHTML='<div class="empty">No workshops matched.</div>'; return; }
+  grid.innerHTML = items.map(function(w){
+    var catColor = {Hackathon:"b-purple","Immersion Day":"b-blue","Discovery Series":"b-green",External:"b-gray"};
+    return '<div class="ws-card">'
+      +'<div class="ws-cat"><span class="badge '+(catColor[w.cat]||"b-gray")+'">'+x(w.cat)+'</span></div>'
+      +'<h3>'+x(w.name)+'</h3>'
+      +'<p>'+x(w.desc)+'</p>'
+      +lnk(w.link,"Open &rarr;")
+      +'</div>';
+  }).join("");
+}
+
+// ── FLOATING WIDGET ───────────────────────────────────────────────────────────
+
+var fwOpen     = false;
+var fwGreeted  = false;
+var fwUnread   = 0;
+
+function fwToggle() {
+  fwOpen = !fwOpen;
+  document.getElementById('fw-panel').classList.toggle('open', fwOpen);
+  document.getElementById('fw-fab-icon').textContent = fwOpen ? '\u2715' : '\uD83E\uDD16';
+  if (fwOpen) {
+    // clear unread badge
+    fwUnread = 0;
+    document.getElementById('fw-badge').style.display = 'none';
+    // send greeting once
+    if (!fwGreeted) {
+      fwGreeted = true;
+      fwAddMsg('bot',
+        'Hi! I\'m your <strong>AWS Training assistant</strong>. Ask me about:<br>'
+        +'&#128197; Events &nbsp;&#127885; Certifications &nbsp;&#129504; Gen AI<br>'
+        +'&#127881; Vouchers &nbsp;&#128218; LRT &amp; CAP &nbsp;&#128640; Skill Builder<br><br>'
+        +'Or pick a topic above &#8593;'
+      );
+    }
+    setTimeout(function(){ document.getElementById('fw-in').focus(); }, 220);
+  }
+}
+
+function fwTs() {
+  var d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+function fwAddMsg(role, html) {
+  var msgs = document.getElementById('fw-msgs');
+  var div  = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = '<div class="bubble">' + html + '</div><div class="msg-time">' + fwTs() + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  // if panel closed, show unread badge on FAB
+  if (!fwOpen && role === 'bot') {
+    fwUnread++;
+    var badge = document.getElementById('fw-badge');
+    badge.textContent = fwUnread;
+    badge.style.display = 'flex';
+  }
+}
+
+function fwShowTyping() {
+  var msgs = document.getElementById('fw-msgs');
+  var div  = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'fw-typing';
+  div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function fwRemoveTyping() {
+  var el = document.getElementById('fw-typing');
+  if (el) el.parentNode.removeChild(el);
+}
+
+function fwChip(q) {
+  if (!fwOpen) fwToggle();
+  document.getElementById('fw-in').value = q;
+  fwSend();
+}
+
+function fwSend() {
+  var input = document.getElementById('fw-in');
+  var q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  fwAddMsg('user', x(q));
+  fwShowTyping();
+  setTimeout(function() {
+    fwRemoveTyping();
+    fwAddMsg('bot', botAnswer(q));
+  }, 420);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+window.onload = function() {
+  renderDashboard();
+  renderCalendar();
+  renderWorkshops();
+  // Page chat welcome message
+  addMsg('bot',
+    'Hi! I\'m your <strong>IBM AWS Training assistant</strong>. I know about:<br>'
+    +'&bull; Upcoming training events &amp; calendar<br>'
+    +'&bull; AWS certifications (Foundation to Specialty)<br>'
+    +'&bull; Gen AI learning paths<br>'
+    +'&bull; Vouchers, LRT, CAP, Credly<br>'
+    +'&bull; Tech talks, immersion days &amp; recordings<br><br>'
+    +'What would you like to know?'
+  );
+  // Show floating widget unread nudge after 3 s
+  setTimeout(function() {
+    if (!fwOpen) {
+      fwUnread = 1;
+      var badge = document.getElementById('fw-badge');
+      badge.textContent = '1';
+      badge.style.display = 'flex';
+    }
+  }, 3000);
+};
+</script>
+</body>
+</html>
