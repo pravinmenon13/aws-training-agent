@@ -217,7 +217,7 @@ export const FAQS = [
     {
         id: 1,
         question: "How do I start the certification process?",
-        answer: "Refer to the CIC India Certification Process.",
+        answer: "Refer to the CIC India Certification Process: https://w3.ibm.com/services/lighthouse/spaces/view/learning-knowledge-cic-india/new-certification-process",
         tags: ["certification", "process", "getting started"],
     },
     {
@@ -259,7 +259,7 @@ export const FAQS = [
     {
         id: 8,
         question: "How do I use a voucher / Voucher shows invalid / Error in voucher?",
-        answer: "Refer to the voucher usage guidelines.",
+        answer: "Refer to the guidelines: https://w3.ibm.com/w3publisher/certification-exam-scheduling-guides/aws-cert-scheduling-guide",
         tags: ["voucher", "error", "invalid", "guidelines"],
     },
     {
@@ -301,7 +301,7 @@ export const FAQS = [
     {
         id: 15,
         question: "What is the LRT Approval Escalation matrix?",
-        answer: "Click here for details (refer to the LRT escalation matrix link on the IBM W3 page).",
+        answer: "Click here for details: https://w3.ibm.com/services/lighthouse/spaces/view/learning-knowledge-cic-india/capcertificationescalationpage",
         tags: ["lrt", "escalation", "approval"],
     },
     {
@@ -375,5 +375,11 @@ export const FAQS = [
         question: "Is there another attempt if I don't clear the exam the first time?",
         answer: "Yes. Close the LRT as Failed and raise another fresh request with a cool-off period of 15 days for Foundation and Associate level re-attempts. Use this period for better preparation. For Pro and Specialty level, a cool-off period of 1 month is recommended given the complexity of the certification.",
         tags: ["attempt", "failed", "retry", "cool off", "foundation", "associate", "professional", "specialty", "lrt"],
+    },
+    {
+        id: 28,
+        question: "How do I get a voucher?",
+        answer: "Request for it through the Learning Request Tool (LRT): https://lrt.yourlearning.ibm.com/home",
+        tags: ["voucher", "lrt", "get", "request", "how"],
     },
 ];
