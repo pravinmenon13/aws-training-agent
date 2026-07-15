@@ -1,5 +1,7 @@
 # IBM AWS Training Hub
 
+🌐 **Live app → https://pravinmenon13.github.io/aws-training-agent/**
+
 A self-contained, single-file web app for IBM L&K India that centralises all AWS training information — events, certifications, Gen AI paths, resources, FAQ and a rule-based chatbot — with no backend or build step required.
 
 ## Live Features
