@@ -110,7 +110,7 @@
   .ws-card h3 { font-size:13px; font-weight:600; margin-bottom:5px; line-height:1.4; }
   .ws-card p { font-size:12px; color:var(--muted); margin-bottom:10px; line-height:1.5; }
   .ws-card a { color:var(--accent); font-size:12px; font-weight:600; text-decoration:none; }
-  /* ── Chat ── */
+  /* ── Chat (page) ── */
   #page-chat { display:none; flex-direction:column; height:calc(100vh - 60px); }
   #page-chat.active { display:flex; }
   .chat-msgs { flex:1; overflow-y:auto; padding:8px 0 16px; display:flex; flex-direction:column; gap:12px; }
@@ -128,6 +128,30 @@
   .chat-input-row { display:flex; gap:8px; padding-top:10px; border-top:1px solid var(--border); }
   .chat-input-row input { flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:22px; font-size:13px; outline:none; }
   .chat-input-row input:focus { border-color:var(--accent); }
+  /* ── Floating chatbot widget ── */
+  #fw-fab { position:fixed; bottom:24px; right:24px; width:54px; height:54px; border-radius:50%; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:24px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(59,130,212,.45); z-index:9999; transition:background .15s,transform .15s; }
+  #fw-fab:hover { background:var(--accent-dark); transform:scale(1.08); }
+  #fw-fab .fw-badge { position:absolute; top:-3px; right:-3px; background:#ef4444; color:#fff; font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; }
+  #fw-panel { position:fixed; bottom:88px; right:24px; width:360px; max-height:540px; background:var(--bg); border:1px solid var(--border); border-radius:16px; box-shadow:0 8px 30px rgba(0,0,0,.14); display:flex; flex-direction:column; z-index:9998; overflow:hidden; transform:scale(.94) translateY(12px); opacity:0; pointer-events:none; transition:transform .2s ease,opacity .2s ease; }
+  #fw-panel.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+  #fw-header { background:var(--accent); color:#fff; padding:13px 16px; display:flex; align-items:center; gap:10px; }
+  #fw-header .fw-avatar { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  #fw-header .fw-title { flex:1; }
+  #fw-header .fw-title strong { display:block; font-size:13px; font-weight:700; }
+  #fw-header .fw-title span { font-size:11px; opacity:.85; }
+  #fw-header .fw-close { background:none; border:none; color:#fff; font-size:18px; cursor:pointer; opacity:.8; padding:2px 4px; line-height:1; }
+  #fw-header .fw-close:hover { opacity:1; }
+  #fw-chips { display:flex; flex-wrap:wrap; gap:5px; padding:10px 12px 0; }
+  #fw-chips .chip { font-size:11px; padding:4px 10px; }
+  #fw-msgs { flex:1; overflow-y:auto; padding:10px 12px 4px; display:flex; flex-direction:column; gap:10px; min-height:180px; }
+  #fw-msgs .msg { max-width:86%; }
+  #fw-msgs .bubble { font-size:12.5px; padding:9px 12px; }
+  #fw-msgs .msg-time { font-size:10px; }
+  #fw-input-row { display:flex; gap:6px; padding:10px 12px; border-top:1px solid var(--border); }
+  #fw-input-row input { flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:20px; font-size:12.5px; outline:none; background:var(--bg); color:var(--text); }
+  #fw-input-row input:focus { border-color:var(--accent); }
+  #fw-input-row button { padding:8px 14px; background:var(--accent); color:#fff; border:none; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; }
+  #fw-input-row button:hover { background:var(--accent-dark); }
   .chat-input-row button { padding:10px 20px; background:var(--accent); color:#fff; border:none; border-radius:22px; font-size:13px; font-weight:600; cursor:pointer; }
   .chat-input-row button:hover { background:var(--accent-dark); }
   .typing { display:flex; gap:4px; align-items:center; padding:12px 14px; }
@@ -428,6 +452,40 @@
 
 <footer>Made with IBM Bob</footer>
 </main>
+</div>
+
+<!-- ── FLOATING CHATBOT WIDGET ────────────────────────────────────────────── -->
+<button id="fw-fab" onclick="fwToggle()" title="Ask the Bot">
+  <span id="fw-fab-icon">&#129302;</span>
+  <span class="fw-badge" id="fw-badge" style="display:none">1</span>
+</button>
+
+<div id="fw-panel">
+  <div id="fw-header">
+    <div class="fw-avatar">&#129302;</div>
+    <div class="fw-title">
+      <strong>AWS Training Assistant</strong>
+      <span>&#128994; Online &mdash; ask me anything</span>
+    </div>
+    <button class="fw-close" onclick="fwToggle()" title="Close">&#10005;</button>
+  </div>
+
+  <div id="fw-chips">
+    <span class="chip" onclick="fwChip('What events are coming up?')">&#128197; Events</span>
+    <span class="chip" onclick="fwChip('How do I get a voucher?')">&#127881; Voucher</span>
+    <span class="chip" onclick="fwChip('What is CAP?')">&#128218; CAP</span>
+    <span class="chip" onclick="fwChip('Associate certifications')">&#127885; Certs</span>
+    <span class="chip" onclick="fwChip('What Gen AI courses are available?')">&#129504; Gen AI</span>
+    <span class="chip" onclick="fwChip('How do I get AWS Skill Builder?')">&#128640; Skill Builder</span>
+    <span class="chip" onclick="fwChip('What do I do after clearing my exam?')">&#10003; After exam</span>
+  </div>
+
+  <div id="fw-msgs"></div>
+
+  <div id="fw-input-row">
+    <input id="fw-in" placeholder="Type a question..." onkeydown="if(event.key==='Enter')fwSend()" />
+    <button onclick="fwSend()">Send</button>
+  </div>
 </div>
 
 <script>
@@ -1173,12 +1231,95 @@ function renderWorkshops() {
   }).join("");
 }
 
+// ── FLOATING WIDGET ───────────────────────────────────────────────────────────
+
+var fwOpen     = false;
+var fwGreeted  = false;
+var fwUnread   = 0;
+
+function fwToggle() {
+  fwOpen = !fwOpen;
+  document.getElementById('fw-panel').classList.toggle('open', fwOpen);
+  document.getElementById('fw-fab-icon').textContent = fwOpen ? '\u2715' : '\uD83E\uDD16';
+  if (fwOpen) {
+    // clear unread badge
+    fwUnread = 0;
+    document.getElementById('fw-badge').style.display = 'none';
+    // send greeting once
+    if (!fwGreeted) {
+      fwGreeted = true;
+      fwAddMsg('bot',
+        'Hi! I\'m your <strong>AWS Training assistant</strong>. Ask me about:<br>'
+        +'&#128197; Events &nbsp;&#127885; Certifications &nbsp;&#129504; Gen AI<br>'
+        +'&#127881; Vouchers &nbsp;&#128218; LRT &amp; CAP &nbsp;&#128640; Skill Builder<br><br>'
+        +'Or pick a topic above &#8593;'
+      );
+    }
+    setTimeout(function(){ document.getElementById('fw-in').focus(); }, 220);
+  }
+}
+
+function fwTs() {
+  var d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+function fwAddMsg(role, html) {
+  var msgs = document.getElementById('fw-msgs');
+  var div  = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = '<div class="bubble">' + html + '</div><div class="msg-time">' + fwTs() + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  // if panel closed, show unread badge on FAB
+  if (!fwOpen && role === 'bot') {
+    fwUnread++;
+    var badge = document.getElementById('fw-badge');
+    badge.textContent = fwUnread;
+    badge.style.display = 'flex';
+  }
+}
+
+function fwShowTyping() {
+  var msgs = document.getElementById('fw-msgs');
+  var div  = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'fw-typing';
+  div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function fwRemoveTyping() {
+  var el = document.getElementById('fw-typing');
+  if (el) el.parentNode.removeChild(el);
+}
+
+function fwChip(q) {
+  if (!fwOpen) fwToggle();
+  document.getElementById('fw-in').value = q;
+  fwSend();
+}
+
+function fwSend() {
+  var input = document.getElementById('fw-in');
+  var q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  fwAddMsg('user', x(q));
+  fwShowTyping();
+  setTimeout(function() {
+    fwRemoveTyping();
+    fwAddMsg('bot', botAnswer(q));
+  }, 420);
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 window.onload = function() {
   renderDashboard();
   renderCalendar();
   renderWorkshops();
-  // Welcome message
+  // Page chat welcome message
   addMsg('bot',
     'Hi! I\'m your <strong>IBM AWS Training assistant</strong>. I know about:<br>'
     +'&bull; Upcoming training events &amp; calendar<br>'
@@ -1188,6 +1329,15 @@ window.onload = function() {
     +'&bull; Tech talks, immersion days &amp; recordings<br><br>'
     +'What would you like to know?'
   );
+  // Show floating widget unread nudge after 3 s
+  setTimeout(function() {
+    if (!fwOpen) {
+      fwUnread = 1;
+      var badge = document.getElementById('fw-badge');
+      badge.textContent = '1';
+      badge.style.display = 'flex';
+    }
+  }, 3000);
 };
 </script>
 </body>
