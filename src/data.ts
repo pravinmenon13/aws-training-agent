@@ -1,0 +1,105 @@
+export type EventCategory = "PartnerCast" | "Certification" | "Course" | "Series";
+
+export interface TrainingEvent {
+  id: number;
+  title: string;
+  category: EventCategory;
+  timeStart: string;   // "HH:MM"
+  timeEnd: string;     // "HH:MM"
+  startDate: string;   // "YYYY-MM-DD"
+  endDate: string;     // "YYYY-MM-DD"
+  enrolLink: string;
+}
+
+export const EVENTS: TrainingEvent[] = [
+  {
+    id: 1,
+    title: "AWS PartnerCast: Claude Code on Amazon Bedrock — Best Practices for Production-Ready AI Development",
+    category: "PartnerCast",
+    timeStart: "10:00",
+    timeEnd: "11:00",
+    startDate: "2026-07-03",
+    endDate: "2026-07-03",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 2,
+    title: "AWS Certified Solutions Architect – Professional",
+    category: "Certification",
+    timeStart: "12:30",
+    timeEnd: "14:30",
+    startDate: "2026-07-06",
+    endDate: "2026-08-18",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 3,
+    title: "Python 3 Programming",
+    category: "Course",
+    timeStart: "09:30",
+    timeEnd: "17:30",
+    startDate: "2026-07-20",
+    endDate: "2026-07-24",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 4,
+    title: "AWS Certified Generative AI Developer – Professional",
+    category: "Certification",
+    timeStart: "18:00",
+    timeEnd: "20:00",
+    startDate: "2026-07-08",
+    endDate: "2026-08-20",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 5,
+    title: "Part 1: Introduction to the AI-Driven Development Lifecycle (AI-DLC)",
+    category: "Series",
+    timeStart: "10:00",
+    timeEnd: "10:45",
+    startDate: "2026-07-21",
+    endDate: "2026-07-21",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 6,
+    title: "Part 2: AI-DLC in Depth: From Principles to Practice",
+    category: "Series",
+    timeStart: "10:00",
+    timeEnd: "11:00",
+    startDate: "2026-07-23",
+    endDate: "2026-07-23",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 7,
+    title: "AWS Certified Solutions Architect – Associate",
+    category: "Certification",
+    timeStart: "13:30",
+    timeEnd: "15:30",
+    startDate: "2026-08-10",
+    endDate: "2026-09-08",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 8,
+    title: "Architecting on AWS with Certification Prep",
+    category: "Course",
+    timeStart: "09:30",
+    timeEnd: "13:30",
+    startDate: "2026-09-08",
+    endDate: "2026-09-08", // NOTE: original end date (15-Jul-2026) appears incorrect; defaulted to start date
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+  {
+    id: 9,
+    title: "Advanced Architecting on AWS",
+    category: "Course",
+    timeStart: "09:30",
+    timeEnd: "13:30",
+    startDate: "2026-09-21",
+    endDate: "2026-09-28",
+    enrolLink: "https://w3.ibm.com/w3publisher/aws-training-calendar-resources",
+  },
+];
