@@ -173,11 +173,13 @@
 
   <div class="ns">Overview</div>
   <a id="nav-dashboard"  onclick="show('dashboard')" class="active"><span class="nav-icon">&#127968;</span>Dashboard</a>
-  <a id="nav-calendar"   onclick="show('calendar')"><span class="nav-icon">&#128197;</span>Training Calendar<span class="nav-badge warn">9</span></a>
+  <a id="nav-calendar"   onclick="show('calendar')"><span class="nav-icon">&#128197;</span>Training Calendar<span class="nav-badge warn">8</span></a>
   <a id="nav-enrolments" onclick="show('enrolments')"><span class="nav-icon">&#128203;</span>My Enrolments</a>
 
   <div class="ns">Learn</div>
   <a id="nav-certs"      onclick="show('certs')"><span class="nav-icon">&#127885;</span>Certifications<span class="nav-badge">13</span></a>
+  <a id="nav-bandcert"   onclick="show('bandcert')"><span class="nav-icon">&#127989;</span>Cert by Band</a>
+  <a id="nav-renewals"   onclick="show('renewals')"><span class="nav-icon">&#128260;</span>Cert Renewals</a>
   <a id="nav-genai"      onclick="show('genai')"><span class="nav-icon">&#129504;</span>Gen AI Paths<span class="nav-badge green">13</span></a>
   <a id="nav-reskilling" onclick="show('reskilling')"><span class="nav-icon">&#128260;</span>Reskilling Tracks</a>
   <a id="nav-workshops"  onclick="show('workshops')"><span class="nav-icon">&#128187;</span>Workshops &amp; Labs</a>
@@ -202,7 +204,7 @@
   <div class="page-sub">Your AWS training snapshot at a glance</div>
 
   <div class="stat-grid">
-    <div class="stat-card"><div class="stat-icon">&#128197;</div><div class="stat-val">9</div><div class="stat-lbl">Upcoming Events</div></div>
+    <div class="stat-card"><div class="stat-icon">&#128197;</div><div class="stat-val">8</div><div class="stat-lbl">Upcoming Events</div></div>
     <div class="stat-card"><div class="stat-icon">&#127885;</div><div class="stat-val">13</div><div class="stat-lbl">Certifications</div></div>
     <div class="stat-card"><div class="stat-icon">&#129504;</div><div class="stat-val">13</div><div class="stat-lbl">Gen AI Paths</div></div>
     <div class="stat-card"><div class="stat-icon">&#10067;</div><div class="stat-val">27</div><div class="stat-lbl">FAQ Answers</div></div>
@@ -284,6 +286,70 @@
     </select>
   </div>
   <div id="enrol-body"></div>
+</section>
+
+<!-- CERT BY BAND -->
+<section class="page" id="page-bandcert">
+  <div class="page-title">Required Certifications by Band</div>
+  <div class="page-sub">IBM Hyperscaler &amp; Gen AI certification mapping — source: W3 Required Certifications page</div>
+
+  <div class="sttl">&#128296; Hyperscaler Certification Mapping</div>
+  <div class="tw"><table>
+    <thead><tr><th>Band</th><th>Level Required</th><th>AWS Certification</th><th>Browse Learning Path</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge b-gray">Band 6</span></td><td><span class="badge b-green">Foundation</span></td><td>AWS Certified Cloud Practitioner</td><td><a href="https://yourlearning.ibm.com/activity/PLAN-0149BED84CC5" target="_blank" rel="noopener">IBM Learning &rarr;</a></td></tr>
+      <tr><td><span class="badge b-gray">Band 7, 8</span></td><td><span class="badge b-blue">Associate</span></td><td>Any AWS Associate Certification</td><td><a href="https://w3.ibm.com/w3publisher/aws-training-calendar-resources/aws-learning-resources#Associate" target="_blank" rel="noopener">View Associates &rarr;</a></td></tr>
+      <tr><td><span class="badge b-gray">Band 9+</span></td><td><span class="badge b-purple">Professional / Specialty</span></td><td>Any Pro or Specialty Certification</td><td><a href="https://w3.ibm.com/w3publisher/aws-training-calendar-resources/aws-learning-resources#Pro" target="_blank" rel="noopener">View Pro/Specialty &rarr;</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sttl" style="margin-top:20px">&#129504; Gen AI Certification Mapping</div>
+  <div class="tw"><table>
+    <thead><tr><th>Band</th><th>Level Required</th><th>Gen AI Certification</th><th>Browse Learning Path</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge b-gray">Band 6</span></td><td><span class="badge b-green">Foundation</span></td><td>AWS Certified AI Practitioner</td><td><a href="https://yourlearning.ibm.com/activity/PLAN-0F304CDFFCF5" target="_blank" rel="noopener">IBM Learning &rarr;</a></td></tr>
+      <tr><td><span class="badge b-gray">Band 7, 8</span></td><td><span class="badge b-blue">Associate</span></td><td>AWS Certified Machine Learning Engineer - Associate</td><td><a href="https://yourlearning.ibm.com/activity/PLAN-C5498711CF81" target="_blank" rel="noopener">IBM Learning &rarr;</a></td></tr>
+      <tr><td><span class="badge b-gray">Band 9+</span></td><td><span class="badge b-purple">Professional</span></td><td>AWS Certified Generative AI Developer - Professional</td><td><a href="https://yourlearning.ibm.com/activity/UDEMY-6928347" target="_blank" rel="noopener">IBM Learning &rarr;</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sttl" style="margin-top:20px">&#128101; Meet the Team</div>
+  <div class="card-grid" id="team-cards"></div>
+</section>
+
+<!-- CERT RENEWALS -->
+<section class="page" id="page-renewals">
+  <div class="page-title">Certification Renewals</div>
+  <div class="page-sub">Always keep your credentials relevant and active — L&amp;K provides FREE vouchers for all renewal levels</div>
+
+  <div class="sttl">&#127795; Foundation — AWS Cloud Practitioner (Free, No Exam!)</div>
+  <div class="card" style="margin-bottom:16px">
+    <h3>Renew via Cloud Quest Recertify Game on AWS Skill Builder</h3>
+    <div class="cmeta">No voucher, no Skill Builder subscription, no exam required!</div>
+    <ol style="font-size:13px;line-height:2;padding-left:18px;margin:8px 0">
+      <li>Log into <a href="https://explore.skillbuilder.aws" target="_blank" rel="noopener">AWS Skill Builder</a> using the same account used for your cert (IBM ID / SSO)</li>
+      <li>Search for <strong>Cloud Quest Recertify</strong> and enrol</li>
+      <li>Change role to <strong>Recertify</strong> (not Cloud Practitioner mode)</li>
+      <li>Enter your AWS ID linked to your certification</li>
+      <li>Complete all 13 levels → certification extended by 3 years</li>
+      <li>Claim the certification extension on completion</li>
+    </ol>
+    <p style="font-size:12px;color:var(--muted)">&#9888; Cert must be active &amp; expiry within 6 months. If expired: raise LRT request as renewal.</p>
+  </div>
+
+  <div class="sttl">&#127885; Associate, Professional &amp; Specialty — Free Voucher via LRT</div>
+  <div class="card">
+    <h3>Steps to get your renewal voucher from L&amp;K</h3>
+    <div class="cmeta">Applies to all Associate, Professional and Specialty level certifications</div>
+    <ol style="font-size:13px;line-height:2;padding-left:18px;margin:8px 0">
+      <li>Log into <a href="https://lrt.ibm.com" target="_blank" rel="noopener">LRT</a></li>
+      <li>Select your certification for renewing from the catalogue</li>
+      <li>Mark as <strong>Renewal</strong> for correct tracking</li>
+      <li>Set a tentative exam date (approx. 1 week ahead)</li>
+      <li>Submit with justification — "cert renewal" is sufficient</li>
+      <li>Voucher allocated within <strong>7–10 business days</strong> depending on availability</li>
+    </ol>
+  </div>
 </section>
 
 <!-- GEN AI -->
@@ -492,31 +558,45 @@
 // ── DATA ─────────────────────────────────────────────────────────────────────
 
 var EVENTS = [
-  {id:1,title:"AWS PartnerCast: Claude Code on Amazon Bedrock - Best Practices for Production-Ready AI Development",category:"PartnerCast",ts:"10:00",te:"11:00",sd:"2026-07-03",ed:"2026-07-03",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:2,title:"AWS Certified Solutions Architect - Professional",category:"Certification",ts:"12:30",te:"14:30",sd:"2026-07-06",ed:"2026-08-18",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
+  // Source: https://w3.ibm.com/w3publisher/aws-training-calendar-resources (updated Jul 2026)
+  {id:1,title:"AWS Certified Solutions Architect - Professional",category:"Certification",ts:"12:30",te:"14:30",sd:"2026-07-06",ed:"2026-08-18",link:"https://ec.yourlearning.ibm.com/w3/class/10581037",status:"Class Full"},
+  {id:2,title:"AWS Certified Generative AI Developer - Professional",category:"Certification",ts:"18:00",te:"20:00",sd:"2026-07-08",ed:"2026-08-20",link:"https://events.ringcentral.com/events/amer-aws-partner-certification-readiness-gen-ai-developer-professional-july-2026/registration"},
   {id:3,title:"Python 3 Programming",category:"Course",ts:"09:30",te:"17:30",sd:"2026-07-20",ed:"2026-07-24",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:4,title:"AWS Certified Generative AI Developer - Professional",category:"Certification",ts:"18:00",te:"20:00",sd:"2026-07-08",ed:"2026-08-20",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:5,title:"Part 1: Introduction to the AI-Driven Development Lifecycle (AI-DLC)",category:"Series",ts:"10:00",te:"10:45",sd:"2026-07-21",ed:"2026-07-21",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:6,title:"Part 2: AI-DLC in Depth: From Principles to Practice",category:"Series",ts:"10:00",te:"11:00",sd:"2026-07-23",ed:"2026-07-23",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:7,title:"AWS Certified Solutions Architect - Associate",category:"Certification",ts:"13:30",te:"15:30",sd:"2026-08-10",ed:"2026-09-08",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:8,title:"Architecting on AWS with Certification Prep",category:"Course",ts:"09:30",te:"13:30",sd:"2026-09-08",ed:"2026-09-08",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"},
-  {id:9,title:"Advanced Architecting on AWS",category:"Course",ts:"09:30",te:"13:30",sd:"2026-09-21",ed:"2026-09-28",link:"https://w3.ibm.com/w3publisher/aws-training-calendar-resources"}
+  {id:4,title:"Part 1: Introduction to the AI-Driven Development Lifecycle (AI-DLC)",category:"PartnerCast",ts:"10:00",te:"10:45",sd:"2026-07-21",ed:"2026-07-21",link:"https://events.ringcentral.com/events/aws-partnercast-introduction-to-the-ai-driven-development-lifecycle-ai-dlc"},
+  {id:5,title:"Part 2: AI-DLC in Depth: From Principles to Practice",category:"PartnerCast",ts:"10:00",te:"11:00",sd:"2026-07-23",ed:"2026-07-23",link:"https://events.ringcentral.com/events/aws-partnercast-aws-partnercast-ai-dlc-in-depth-from-principles-to-practice"},
+  {id:6,title:"AWS Certified Solutions Architect - Associate",category:"Certification",ts:"13:30",te:"15:30",sd:"2026-08-10",ed:"2026-09-08",link:"https://events.ringcentral.com/events/apjc-emea-aws-partner-certification-readiness-solutions-architect-associate-august-2026/registration"},
+  {id:7,title:"Architecting on AWS with Certification Prep",category:"Course",ts:"09:30",te:"13:30",sd:"2026-09-08",ed:"2026-09-15",link:"https://ec.yourlearning.ibm.com/w3/class/10581045"},
+  {id:8,title:"Advanced Architecting on AWS",category:"Course",ts:"09:30",te:"13:30",sd:"2026-09-21",ed:"2026-09-28",link:"https://ec.yourlearning.ibm.com/w3/class/10581038"}
+];
+
+var BAND_CERT = [
+  // Hyperscaler Certification Mapping (source: required-certification page)
+  {band:"Band 6",level:"Foundation",cert:"AWS Cloud Practitioner",genai:"AWS AI Practitioner"},
+  {band:"Band 7, 8",level:"Associate",cert:"Any AWS Associate Certification",genai:"AWS Certified Machine Learning Engineer - Associate"},
+  {band:"Band 9+",level:"Professional / Specialty",cert:"Any Pro or Specialty Certification",genai:"AWS Certified Generative AI Developer - Professional"}
+];
+
+var TEAM = [
+  {name:"Aruna Ajay",role:"Associate Partner | AWS Practice Leader - FutureNow Center India",email:"aruna-ajaykumar@in.ibm.com",slack:"@aruna-ajaykumar"},
+  {name:"B Sowmya",role:"Learning Deployment Manager, Delivery Shared Services, L&K",email:"bsowmy70@in.ibm.com",slack:"@bsowmy70"},
+  {name:"Pravin C Menon",role:"Learning Consultant - Delivery Shared Services, Learning & Knowledge",email:"pravinmenon@in.ibm.com",slack:"@PhenoMenon"},
+  {name:"Valeria Benedetti",role:"Global Delivery Leader, Hybrid Cloud & Data, Learning & Knowledge",email:"valeria_benedetti@it.ibm.com",slack:"@Valeria"}
 ];
 
 var CERTS = [
-  {name:"AWS Certified Cloud Practitioner",level:"Foundation",ibm:"https://yourlearning.ibm.com/activity/PLAN-0149BED84CC5",aws:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},
-  {name:"AWS Certified AI Practitioner",level:"Foundation",ibm:"https://yourlearning.ibm.com/activity/PLAN-0F304CDFFCF5",aws:"https://aws.amazon.com/certification/certified-ai-practitioner/"},
-  {name:"AWS Certified Machine Learning Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-C5498711CF81",aws:"https://aws.amazon.com/certification/certified-machine-learning-engineer-associate/",notes:"Hands-on + Practice Exam also available"},
-  {name:"AWS Certified Solution Architect - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-9CA8E9AAA409",aws:"https://aws.amazon.com/certification/certified-solutions-architect-associate/"},
-  {name:"AWS Certified Developer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-D7A55914AB99",aws:"https://aws.amazon.com/certification/certified-developer-associate/",notes:"Mock Exam available"},
-  {name:"AWS Certified SysOps Administrator - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-D3830A921C06/track-progress",aws:"https://aws.amazon.com/certification/certified-sysops-admin-associate/"},
-  {name:"AWS Certified Data Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/UDEMY-5591620"},
-  {name:"AWS Certified Solutions Architect - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/PLAN-14CA33A3EC94",aws:"https://aws.amazon.com/certification/certified-solutions-architect-professional/"},
-  {name:"AWS Certified DevOps Engineer - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/PLAN-09619BF9E491",aws:"https://aws.amazon.com/certification/certified-devops-engineer-professional/"},
-  {name:"AWS Certified Generative AI Developer - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/UDEMY-6928347",aws:"https://aws.amazon.com/certification/certified-generative-ai-developer-professional/"},
-  {name:"AWS Certified Advanced Networking - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-A9447D0DD1A3",aws:"https://aws.amazon.com/certification/certified-advanced-networking-specialty/"},
-  {name:"AWS Certified Machine Learning - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-42E4D536A9E1",aws:"https://aws.amazon.com/certification/certified-machine-learning-specialty/"},
-  {name:"AWS Certified Security - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-2D05C80F7472",aws:"https://aws.amazon.com/certification/certified-security-specialty/"}
+  {name:"AWS Certified Cloud Practitioner",level:"Foundation",ibm:"https://yourlearning.ibm.com/activity/PLAN-0149BED84CC5",aws:"https://aws.amazon.com/certification/certified-cloud-practitioner/",band:"Band 6"},
+  {name:"AWS Certified AI Practitioner",level:"Foundation",ibm:"https://yourlearning.ibm.com/activity/PLAN-0F304CDFFCF5",aws:"https://aws.amazon.com/certification/certified-ai-practitioner/",band:"Band 6 (Gen AI)"},
+  {name:"AWS Certified Machine Learning Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-C5498711CF81",aws:"https://aws.amazon.com/certification/certified-machine-learning-engineer-associate/",notes:"Hands-on (UDEMY-6125705) + Practice Exam (UDEMY-6139021) also available",band:"Band 7, 8 (Gen AI)"},
+  {name:"AWS Certified Solution Architect - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-9CA8E9AAA409",aws:"https://aws.amazon.com/certification/certified-solutions-architect-associate/",band:"Band 7, 8"},
+  {name:"AWS Certified Developer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-D7A55914AB99",aws:"https://aws.amazon.com/certification/certified-developer-associate/",notes:"Mock Exam: EL01-00004381 & DVA-C02 available",band:"Band 7, 8"},
+  {name:"AWS Certified CloudOps Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/PLAN-D3830A921C06/track-progress",aws:"https://aws.amazon.com/certification/certified-sysops-admin-associate/",band:"Band 7, 8"},
+  {name:"AWS Certified Data Engineer - Associate",level:"Associate",ibm:"https://yourlearning.ibm.com/activity/UDEMY-5591620",aws:"https://aws.amazon.com/certification/certified-data-engineer-associate/",band:"Band 7, 8"},
+  {name:"AWS Certified Solutions Architect - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/PLAN-14CA33A3EC94",aws:"https://aws.amazon.com/certification/certified-solutions-architect-professional/",band:"Band 9+"},
+  {name:"AWS Certified DevOps Engineer - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/PLAN-09619BF9E491",aws:"https://aws.amazon.com/certification/certified-devops-engineer-professional/",band:"Band 9+"},
+  {name:"AWS Certified Generative AI Developer - Professional",level:"Professional",ibm:"https://yourlearning.ibm.com/activity/UDEMY-6928347",aws:"https://aws.amazon.com/certification/certified-generative-ai-developer-professional/",band:"Band 9+ (Gen AI)"},
+  {name:"AWS Certified Advanced Networking - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-A9447D0DD1A3",aws:"https://aws.amazon.com/certification/certified-advanced-networking-specialty/",band:"Band 9+"},
+  {name:"AWS Certified Machine Learning - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-42E4D536A9E1",aws:"https://aws.amazon.com/certification/certified-machine-learning-specialty/",band:"Band 9+"},
+  {name:"AWS Certified Security - Specialty",level:"Specialty",ibm:"https://yourlearning.ibm.com/activity/PLAN-2D05C80F7472",aws:"https://aws.amazon.com/certification/certified-security-specialty/",band:"Band 9+"}
 ];
 
 var CPE = [
@@ -700,6 +780,8 @@ function show(id) {
     calendar:renderCalendar,
     enrolments:renderEnrolments,
     certs:renderCerts,
+    bandcert:renderTeamCards,
+    renewals:function(){},
     genai:renderGenAI,
     workshops:renderWorkshops,
     resources:renderResources,
@@ -707,6 +789,23 @@ function show(id) {
     faq:renderFAQ
   };
   if (map[id]) map[id]();
+}
+
+// ── TEAM CARDS ────────────────────────────────────────────────────────────────
+
+function renderTeamCards() {
+  var el = document.getElementById('team-cards');
+  if (!el) return;
+  el.innerHTML = TEAM.map(function(m) {
+    return '<div class="card">'
+      +'<h3>'+x(m.name)+'</h3>'
+      +'<div class="cmeta">'+x(m.role)+'</div>'
+      +'<div style="font-size:12px;margin-top:4px">'
+      +'<a href="mailto:'+x(m.email)+'" style="color:var(--accent)">&#9993; '+x(m.email)+'</a>'
+      +'&nbsp;&nbsp;<span style="color:var(--muted)">'+x(m.slack)+'</span>'
+      +'</div>'
+      +'</div>';
+  }).join('');
 }
 
 // ── CALENDAR ──────────────────────────────────────────────────────────────────
@@ -724,6 +823,9 @@ function renderCalendar() {
     var dc = d>0 ? '<span style="color:var(--success);font-weight:600">in '+d+'d</span>'
            : d===0 ? '<span style="color:var(--warn);font-weight:600">TODAY</span>'
            : '<span style="color:var(--muted)">'+Math.abs(d)+'d ago</span>';
+    var enrolBtn = e.status==='Class Full'
+      ? '<span class="badge b-red">Class Full</span>'
+      : lnk(e.link,"Enrol");
     return '<tr>'
       +'<td style="color:var(--muted)">'+e.id+'</td>'
       +'<td style="font-weight:500;max-width:280px">'+x(e.title)+'</td>'
@@ -732,7 +834,7 @@ function renderCalendar() {
       +'<td style="white-space:nowrap">'+e.sd+'</td>'
       +'<td style="white-space:nowrap">'+e.ed+'</td>'
       +'<td>'+dc+'</td>'
-      +'<td>'+lnk(e.link,"Enrol")+'</td>'
+      +'<td>'+enrolBtn+'</td>'
       +'</tr>';
   }).join("");
 }
@@ -752,7 +854,7 @@ function renderCerts() {
     html += items.map(function(c){
       return '<div class="card">'
         +'<h3>'+x(c.name)+'</h3>'
-        +'<div class="cmeta">'+lvBadge(c.level)+'</div>'
+        +'<div class="cmeta">'+lvBadge(c.level)+(c.band?' &nbsp;<span class="badge b-gray" style="font-size:10px">'+x(c.band)+'</span>':'')+'</div>'
         +(c.notes?'<div style="font-size:11px;color:var(--muted);margin-bottom:6px">'+x(c.notes)+'</div>':"")
         +'<div style="display:flex;gap:8px;flex-wrap:wrap;">'
         +(c.ibm?lnk(c.ibm,"IBM Learning"):"")
